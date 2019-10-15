@@ -9,7 +9,7 @@
 <% String username = request.getParameter("Username");
 	String password = request.getParameter("Password");
 	DbConnect test = new DbConnect();
-	test.insert(username, password);%>
+	%>
 	
 <%
     String redirectURL = "index.jsp";

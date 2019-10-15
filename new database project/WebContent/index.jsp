@@ -4,22 +4,11 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import = "com.luv2code.jsp.*" %>
+<%@ page import = "com.luv2code.jsp.DbServlet" %>
 <%@ page import="java.sql.*" %> 
 <%@ page import="java.io.*" %> 
 
-<% 
-try {
-    //Class.forName("com.mysql.jdbc.Driver");
-	Class.forName("com.mysql.jdbc.Driver");
-} catch (ClassNotFoundException e) {
-    throw new SQLException(e);
-}
-Connection connect = null;
-connect = (Connection) DriverManager
-	      .getConnection("jdbc:mysql://127.0.0.1:3306/projectdb?"
-	          + "user=john&password=pass1234");
-System.out.println(connect);
-System.out.println("IT WORKED!!"); %>
+
 
 <html>
 
@@ -32,10 +21,14 @@ System.out.println("IT WORKED!!"); %>
 	</head>
 
 <h1>Test</h1><br><br>
+<% DbConnect test = new DbConnect(); %>
+<form action = "initializeDb.jsp" method = "GET">
+	<input type="submit" value="Initialize" name = "initialize">
+</form>
 
 
 <!--form for user to input their username and password.-->
- <form action="dbConnect.jsp" method="post">
+ <form action="dbConnect.jsp" method="POST">
   Username:<br>
   <input type="text" name="Username"><br>
   Password:<br>

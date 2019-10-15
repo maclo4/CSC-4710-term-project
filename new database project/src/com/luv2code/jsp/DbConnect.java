@@ -45,10 +45,53 @@ public class DbConnect{
 	        	connect.close();
 	        }
 	    }
-	  public boolean insert(String item, String price) throws SQLException {
+	  public boolean insert(String item, String price, String description) throws SQLException {
 	    	connect_func();  
 	    	//request.getParameter("Username");
-			String sql = "insert into Items(title, price) values (?, ?)";
+			String sql = "insert into Items(title, price, description) values (?, ?, ?)";
+			preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+			preparedStatement.setString(1, item);
+			preparedStatement.setString(2, price);
+			preparedStatement.setString(3, description);
+			
+//			preparedStatement.executeUpdate();
+			 boolean rowInserted = preparedStatement.executeUpdate() > 0;
+		        preparedStatement.close();
+//		        disconnect();
+		        return rowInserted;
+		    }     
+	  public boolean initializeDb() throws SQLException{
+		  
+		 	connect_func();  
+	    	//request.getParameter("Username");
+		 	String sql1 = "drop table IF EXISTS Items" ;
+		 		
+		 	String sql2 =	"CREATE TABLE Items(" + 
+		 			"Title varchar(50)," + 
+		 			"ID int NOT NULL AUTO_INCREMENT," + 
+		 			"Price DECIMAL(7,2)  NOT NULL," + 
+		 			"Description TEXT," + 
+		 			"DatePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP," + 
+		 			"Primary key(ID))";
+		 	
+		 	
+		 	
+		 	statement =  (Statement) connect.createStatement();
+		 	statement.executeUpdate(sql1);
+		 	statement.executeUpdate(sql2);
+		 	System.out.println("table initialized?");
+		 	
+		 	DbConnect test = new DbConnect();
+		 	test.insert("bananas", "12.50", "Yellow and Yummy");
+		 	test.insert("dvd", "12.00", "Fast and Furious");
+		 	test.insert("watermelon", "6.50", "Red and Yummy");
+		 	test.insert("socks", "2.50", "Black");
+		 	test.insert("laptop", "120.50", "Silver");
+		 	test.insert("trash bag", "1.50", "black");
+		 	test.insert("white tee", "5.50", "Plain white tee");
+		 	test.insert("seeds", "12.50", "For growing fruit");
+	        return true;
+			/*String sql = "insert into Items(title, price) values (?, ?)";
 			preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, item);
 			preparedStatement.setString(2, price);
@@ -57,6 +100,6 @@ public class DbConnect{
 			 boolean rowInserted = preparedStatement.executeUpdate() > 0;
 		        preparedStatement.close();
 //		        disconnect();
-		        return rowInserted;
-		    }     
+		        return rowInserted;*/
+	  }
 }
