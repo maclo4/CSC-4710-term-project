@@ -36,6 +36,7 @@
   <input type="submit" value="Submit">
 </form> 
 <h2>
+
 <% /* String username = request.getParameter("Username");
 	String password = request.getParameter("Password");
 	DbConnect test = new DbConnect();
