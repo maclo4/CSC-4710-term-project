@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import = "com.luv2code.jsp.*" %>
-<%@ page import = "com.luv2code.jsp.DbServlet" %>
+<%@ page import = "com.luv2code.jsp.AuthenticateServlet" %>
 <%@ page import="java.sql.*" %> 
 <%@ page import="java.io.*" %>
 

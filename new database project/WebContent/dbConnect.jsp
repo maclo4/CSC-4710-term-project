@@ -9,6 +9,13 @@
 <% String username = request.getParameter("Username");
 	String password = request.getParameter("Password");
 	DbConnect test = new DbConnect();
+	boolean authenticate = test.authenticate(username, password);
+	
+	if(authenticate == true)
+	{
+	//String username=request.getParameter("Username"); 
+	out.print("Welcome "+ username);
+	session.setAttribute("sessname",username); }
 	%>
 	
 <%

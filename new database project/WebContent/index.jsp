@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import = "com.luv2code.jsp.*" %>
-<%@ page import = "com.luv2code.jsp.DbServlet" %>
+<%@ page import = "com.luv2code.jsp.AuthenticateServlet" %>
 <%@ page import="java.sql.*" %> 
 <%@ page import="java.io.*" %> 
 
@@ -28,7 +28,7 @@
 
 
 <!--form for user to input their username and password.-->
- <form action="dbConnect.jsp" method="POST">
+ <form action="Authenticate" method="POST">
   Username:<br>
   <input type="text" name="Username"><br>
   Password:<br>
@@ -37,11 +37,7 @@
 </form> 
 <h2>
 
-<% /* String username = request.getParameter("Username");
-	String password = request.getParameter("Password");
-	DbConnect test = new DbConnect();
-	test.insert(username, password);
-	*/ %>
+<%= session.getAttribute("Username") %>
 	
 <%= request.getParameter("Username") %>
 

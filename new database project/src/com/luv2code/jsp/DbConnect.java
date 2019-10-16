@@ -1,4 +1,6 @@
 package com.luv2code.jsp;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -11,8 +13,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-public class DbConnect{
+
+@WebServlet("/DbConnect")
+public class DbConnect extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private Connection connect = null;
 	private Statement statement = null;
@@ -20,9 +30,36 @@ public class DbConnect{
 	private ResultSet resultSet = null;
 	
 
-	public DbConnect() {
-
+	/**
+     * @see HttpServlet#HttpServlet()
+     */
+    public DbConnect() {
+        super();
+        // TODO Auto-generated constructor stub
     }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */ 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getServletPath();
+        System.out.println("inside the servlet");
+        PrintWriter out = response.getWriter();
+        out.println("it workeddd" + action);
+        
+        
+        // Figure out which button was pressed
+        
+    }
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
 	public static String printSomething(String test) {
 		return test.toLowerCase();
 	}
@@ -121,7 +158,8 @@ public class DbConnect{
 
 		        return rowInserted;
 	  }
-	  
+	
+	 
 	  // big function that just initializes all the necessary tables using other insert functions
 	  public boolean initializeDb() throws SQLException{
 		  
@@ -211,4 +249,43 @@ public class DbConnect{
 //		        disconnect();
 		        return rowInserted;*/
 	  }
+	  
+	  
+	  
+	  // authenticate username and password
+	  public boolean authenticate(String username, String password) throws SQLException
+	  {
+		  connect_func();
+		  
+		  
+		  String sql0 = "SELECT Password FROM Users Where UserID = ?";
+		  
+		  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		  	preparedStatement.setString(1, username);
+		  	System.out.println("after ps");
+		  
+		  String pass = "";
+		  try {
+		  ResultSet resultSet = preparedStatement.executeQuery();
+		 
+		  		while(resultSet.next())
+		  		{
+		  			pass = resultSet.getString("Password");
+		  			System.out.println(pass);
+		  		}
+		  } catch(Exception e) {
+			  System.out.println(e);}
+		  
+		
+		  
+		  
+		  if(pass.equals(password)){
+			  System.out.println("Password matched");
+			  return true;}
+		  else {
+			  System.out.println("Password not matched: " + pass + ", " + password);
+			  return false;}
+		 
+	  }
+	  
 }
