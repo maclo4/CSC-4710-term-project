@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 
 
 @WebServlet("/DbConnect")
-public class DbConnect extends HttpServlet{
+public class DbFunctions extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private Connection connect = null;
 	private Statement statement = null;
@@ -33,7 +33,7 @@ public class DbConnect extends HttpServlet{
 	/**
      * @see HttpServlet#HttpServlet()
      */
-    public DbConnect() {
+    public DbFunctions() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -63,6 +63,10 @@ public class DbConnect extends HttpServlet{
 	public static String printSomething(String test) {
 		return test.toLowerCase();
 	}
+	
+	//========================================================
+	// CONNECT TO DATABASE
+	//========================================================
 	public void connect_func() throws SQLException {
         if (connect == null || connect.isClosed()) {
             try {
@@ -77,11 +81,18 @@ public class DbConnect extends HttpServlet{
             System.out.println("IT WORKED!!");
         }
     }
+	//========================================================
+	// DISCONNECT FROM DATABASE
+	//========================================================
 	  protected void disconnect() throws SQLException {
 	        if (connect != null && !connect.isClosed()) {
 	        	connect.close();
 	        }
 	    }
+	  
+	//========================================================
+	// INSERT ITEM INTO DATABASE
+	//========================================================
 	  public boolean insertItem(String item, String price, String description) throws SQLException {
 	    	
 		  	connect_func();  
@@ -105,6 +116,9 @@ public class DbConnect extends HttpServlet{
 		        return rowInserted;
 		    }     
 	  
+	//========================================================
+	// INSERT CATEGORY INTO DATABASE
+	//========================================================
 	  public boolean insertCategory(String item, String category) throws SQLException {
 		  String sql0 = "INSERT INTO ItemCategories(ItemID, Category) VALUES (" + 
 		  		"	(SELECT ID FROM Items WHERE title = ?)," + 
@@ -123,7 +137,9 @@ public class DbConnect extends HttpServlet{
 //	        disconnect();
 	        return rowInserted;
 	  }
-	  
+	//========================================================
+	// INSERT USER INTO DATABASE
+	//========================================================
 	  public boolean insertUser(String userID, String password, String email,
 			  String firstName, String lastName, String gender, String age, Boolean admin) throws SQLException {
 		  
@@ -159,8 +175,35 @@ public class DbConnect extends HttpServlet{
 		        return rowInserted;
 	  }
 	
-	 
-	  // big function that just initializes all the necessary tables using other insert functions
+	// =======================================================
+	// SEARCH FOR AN ITEM BASED ON THE CATEGORY
+	//========================================================
+	  public ResultSet categorySearch(String category) throws SQLException{
+		  
+		  String sql0 = "SELECT * FROM ItemCategories WHERE ItemID = ?";
+		  System.out.println("Inside the search function");
+			
+			  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+				preparedStatement.setString(1, category);
+				
+			
+				// try blocks so that the system doesn't crash when sql statements are rejected
+				try {
+				resultSet = preparedStatement.executeQuery();
+				 System.out.println("Inside the search function try block");
+		        preparedStatement.close();}
+				catch(Exception e) {
+					System.out.println(e);
+					 System.out.println("Inside the search function catch block");}
+//		        disconnect();
+		        return resultSet;
+		  }
+	  
+	  
+	//========================================================
+	  // big function that just initializes all the necessary
+	  // tables using other insert functions
+	//========================================================
 	  public boolean initializeDb() throws SQLException{
 		  
 		 	connect_func();  
@@ -179,7 +222,7 @@ public class DbConnect extends HttpServlet{
 		 			"Primary key(ID))";
 		 	
 		 	String sql3 = "CREATE TABLE ItemCategories(" + 
-		 			"ItemID int NOT NULL AUTO_INCREMENT," + 
+		 			"ItemID int NOT NULL," + 
 		 			"Category varchar(25) NOT NULL," + 
 		 			"PRIMARY KEY(ItemId, Category)," + 
 		 			"FOREIGN KEY (ItemID) REFERENCES Items(ID)" + 
@@ -210,7 +253,7 @@ public class DbConnect extends HttpServlet{
 		 	System.out.println("tables created.");
 		 	
 		 	// initialize items table
-		 	DbConnect test = new DbConnect();
+		 	DbFunctions test = new DbFunctions();
 		 	test.insertItem("Banana", "12.50", "Yellow and Yummy");
 		 	test.insertItem("Dvd", "12.00", "Fast and Furious");
 		 	test.insertItem("Watermelon", "6.50", "Red and Yummy");
@@ -251,8 +294,9 @@ public class DbConnect extends HttpServlet{
 	  }
 	  
 	  
-	  
+	//========================================================
 	  // authenticate username and password
+	//========================================================
 	  public boolean authenticate(String username, String password) throws SQLException
 	  {
 		  connect_func();
@@ -276,9 +320,7 @@ public class DbConnect extends HttpServlet{
 		  } catch(Exception e) {
 			  System.out.println(e);}
 		  
-		
-		  
-		  
+
 		  if(pass.equals(password)){
 			  System.out.println("Password matched");
 			  return true;}

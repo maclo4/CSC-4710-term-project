@@ -45,7 +45,7 @@ public class AuthenticateServlet extends HttpServlet {
     	String action = request.getServletPath();
     	System.out.println("inside the servlet");
         PrintWriter out = response.getWriter();
-        out.println("it workeddd" + action);
+        out.println("it worked" + action);
         
         // connect to session
         HttpSession session = request.getSession();
@@ -54,10 +54,10 @@ public class AuthenticateServlet extends HttpServlet {
         String username = request.getParameter("Username");
     	String password = request.getParameter("Password");
     	
-    	  out.println(username + " " + password);
+    	out.println(username + " " + password);
     	Boolean auth = false;
     	
-    	DbConnect test = new DbConnect();
+    	DbFunctions test = new DbFunctions();
     	try {
     	// call authenticate function and store boolean value
     	auth = test.authenticate(username, password);
@@ -85,6 +85,12 @@ public class AuthenticateServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+	
+	
+	
+	
+	
 	// authenticate username and password
 	/*
 	public boolean authenticate(String username, String password) throws SQLException{

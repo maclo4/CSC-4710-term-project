@@ -21,18 +21,20 @@
 	</head>
 
 <h1>Test</h1><br><br>
-<% DbConnect test = new DbConnect(); %>
-<form action = "initializeDb.jsp" method = "GET">
+
+<form action = "controller.jsp" method = "GET">
 	<input type="submit" value="Initialize" name = "initialize">
+	 <input type="hidden" name="FormName" value="Initialize"/>
 </form>
 
 
 <!--form for user to input their username and password.-->
- <form action="Authenticate" method="POST">
+ <form action="controller.jsp" method="POST" >
   Username:<br>
   <input type="text" name="Username"><br>
   Password:<br>
   <input type="text" name="Password"><br><br>
+  <input type="hidden" name="FormName" value="Authenticate"/>
   <input type="submit" value="Submit">
 </form> 
 <h2>
