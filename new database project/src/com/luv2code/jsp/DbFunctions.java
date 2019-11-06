@@ -178,9 +178,9 @@ public class DbFunctions extends HttpServlet{
 	// =======================================================
 	// SEARCH FOR AN ITEM BASED ON THE CATEGORY
 	//========================================================
-	  public ResultSet categorySearch(String category) throws SQLException{
+	  public void categorySearch(String category) throws SQLException{
 		  
-		  String sql0 = "SELECT * FROM ItemCategories WHERE ItemID = ?";
+		  String sql0 = "SELECT * FROM ItemCategories WHERE Category = ?";
 		  System.out.println("Inside the search function");
 			
 			  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
@@ -191,12 +191,20 @@ public class DbFunctions extends HttpServlet{
 				try {
 				resultSet = preparedStatement.executeQuery();
 				 System.out.println("Inside the search function try block");
-		        preparedStatement.close();}
+				// System.out.println(resultSet.next());
+		        preparedStatement.close();
+		        List<String> ItemList = new ArrayList<>();
+		        while(resultSet.next()) {
+		        	ItemList.add(resultSet.getString("ItemID"));
+		        	
+		        }
+		       
+				}
 				catch(Exception e) {
 					System.out.println(e);
 					 System.out.println("Inside the search function catch block");}
 //		        disconnect();
-		        return resultSet;
+		        
 		  }
 	  
 	  
@@ -262,16 +270,16 @@ public class DbFunctions extends HttpServlet{
 		 	test.insertItem("Trash bag", "1.50", "black");
 		 	test.insertItem("White tee", "5.50", "Plain white tee");
 		 	test.insertItem("Sunflower Seeds", "12.50", "For eating");
-		 	test.insertItem("iPhone X", "1200.00", "Black");
+		 	test.insertItem("iPhone", "1200.00", "Black");
 		 	test.insertItem("China Plates", "120.50", "Genuine ceramics");
 		 	
 		 	// initialize categories for items
 		 	test.insertCategory("Banana", "fruit");
 		 	test.insertCategory("Banana", "food");
 		 	test.insertCategory("Dvd", "entertainment");
-		 	test.insertCategory("Socks", "clothing");
-		 	test.insertCategory("DVD", "technology");
-		 	test.insertCategory("Laptop", "technology");
+		 	test.insertCategory("Black socks", "clothing");
+		 	test.insertCategory("Dvd", "technology");
+		 	test.insertCategory("Laptop", "testingg");
 		 	test.insertCategory("Laptop", "windows");
 		 	test.insertCategory("Watermelon", "fruit");
 		 	test.insertCategory("Sunflower Seeds", "food");

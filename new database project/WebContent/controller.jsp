@@ -97,12 +97,14 @@ switch(htmlFormName) {
 	  test.insertCategory(ItemName, Category);
 	  
 	  // display item
+	  test.categorySearch(Category);
 	  
-	  results = test.categorySearch(Category);
-	  output.println("outside the while loop");
-	  if (results.next()) {    
+	  //output.println("outside the while loop" + results.next());
+	  
+	  /* if (results.next()) {    
+		  output.println("inside the while loop");
 		  output.println("Item you added: " + results.getString("Category"));
-		}
+		}*/
 	  
 	  
 	  
