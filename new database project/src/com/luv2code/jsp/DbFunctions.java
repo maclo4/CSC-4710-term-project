@@ -178,33 +178,46 @@ public class DbFunctions extends HttpServlet{
 	// =======================================================
 	// SEARCH FOR AN ITEM BASED ON THE CATEGORY
 	//========================================================
-	  public void categorySearch(String category) throws SQLException{
+	  public ReturnObject categorySearch(String category) throws SQLException{
+		  
+		  ReturnObject Items = new ReturnObject();
 		  
 		  String sql0 = "SELECT * FROM ItemCategories WHERE Category = ?";
 		  System.out.println("Inside the search function");
 			
-			  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
-				preparedStatement.setString(1, category);
+			 preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+			preparedStatement.setString(1, category);
 				
 			
 				// try blocks so that the system doesn't crash when sql statements are rejected
 				try {
-				resultSet = preparedStatement.executeQuery();
-				 System.out.println("Inside the search function try block");
+				ResultSet resultSet2 = preparedStatement.executeQuery();
+				 System.out.println("Inside the search function try block " + resultSet);
 				// System.out.println(resultSet.next());
-		        preparedStatement.close();
+		        
+		        
+		        // class that holds data for this type of search
 		        List<String> ItemList = new ArrayList<>();
-		        while(resultSet.next()) {
-		        	ItemList.add(resultSet.getString("ItemID"));
-		        	
+		        
+		        
+		        
+		        while(resultSet2.next()) {
+		        	System.out.println("line 203");
+		        	ItemList.add(resultSet2.getString("Category"));
 		        }
 		       
+		        System.out.println("line 206" + ItemList);
+		        Items.setCategories(ItemList);
+		        System.out.println("line 208");
+		        preparedStatement.close();
+		        System.out.println("line 210");
 				}
 				catch(Exception e) {
 					System.out.println(e);
 					 System.out.println("Inside the search function catch block");}
 //		        disconnect();
 		        
+				return Items;
 		  }
 	  
 	  
