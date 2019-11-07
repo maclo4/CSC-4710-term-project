@@ -175,7 +175,59 @@ public class DbFunctions extends HttpServlet{
 
 		        return rowInserted;
 	  }
-	
+	//========================================================
+	// SEARCH: GET MOST EXPENSIVE
+	//========================================================
+	  public ItemClass getMostExpensive() throws SQLException {
+		  
+		  connect_func();
+		  
+		  ItemClass items = new ItemClass();
+		  String sql0 = "DROP VIEW IF EXISTS Prices"; 
+		  String sql1 = " CREATE VIEW Prices(Category, Price) AS \r\n" + 
+		  		"	SELECT C.Category, MAX(I.Price)\r\n" + 
+		  		"       FROM Items I, ItemCategories C\r\n" + 
+		  		"	   WHERE I.ID = C.ItemID \r\n" + 
+		  		"       GROUP BY Category";
+		  
+		  String sql2 = "SELECT I.Price, I.title, P.Category\r\n" + 
+		  		" FROM  Prices P, Items I, ItemCategories C\r\n" + 
+		  		" WHERE P.Price = I.price AND I.ID = C.ItemID AND C.Category = P.Category\r\n" + 
+		  		" group by P.Category\r\n";
+		  
+		  try {
+		  statement =  (Statement) connect.createStatement();
+		   statement.executeUpdate(sql0);
+		 	statement.executeUpdate(sql1);
+		 	resultSet = statement.executeQuery(sql2);
+		 	
+		 	List<String> PriceList = new ArrayList<>();
+	        List<String> titleList = new ArrayList<>();
+	        List<String> categoryList = new ArrayList<>();
+	        
+	        System.out.println("line 208");
+	        while(resultSet.next()) {
+	        	//System.out.println("line 210");
+	        	PriceList.add(resultSet.getString("Price"));
+	        	titleList.add(resultSet.getString("title"));
+	        	System.out.println(resultSet.getString("title"));
+	        	categoryList.add(resultSet.getString("Category"));
+	        	
+	        }
+	       
+	        items.setPrice(PriceList);
+	        items.setTitle(titleList);
+	        items.setCategory(categoryList);
+	        statement.close();
+			}
+			catch(Exception e) {
+				System.out.println("line 223");
+				System.out.println(e);}
+
+		  return items;
+	  }
+	  
+	  
 	// =======================================================
 	// SEARCH FOR AN ITEM BASED ON THE CATEGORY
 	//========================================================

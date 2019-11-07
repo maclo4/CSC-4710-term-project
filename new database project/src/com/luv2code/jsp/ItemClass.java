@@ -10,6 +10,7 @@ public class ItemClass {
 	private List<String> title = new ArrayList<>();
 	private List<String> description = new ArrayList<>();
 	private List<String> datePosted = new ArrayList<>();
+	private List<String> category = new ArrayList<>();
 	
 	public List<String> getTitle(){
 		
@@ -19,10 +20,21 @@ public class ItemClass {
 		if(!title.isEmpty()) {
 			title.clear();
 		}
-		price.addAll(p_title);
-		System.out.println(price.get(0));
+		title.addAll(p_title);
+		System.out.println(title.get(0));
 	}
-	
+
+	public List<String> getCategory(){
+		
+		return category;
+	}
+	public void setCategory(List<String> p_category) {
+		if(!category.isEmpty()) {
+			category.clear();
+		}
+		category.addAll(p_category);
+		System.out.println(category.get(0) + ": it should be here");
+	}
 	public List<String> getPrice(){
 	
 		return price;

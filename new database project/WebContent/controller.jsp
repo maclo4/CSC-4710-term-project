@@ -131,6 +131,27 @@ switch(htmlFormName) {
 	  // display item
 	  
 		break;
+
+// ========================================================
+// LIST MOST EXPENSIVE
+// ========================================================
+  case "Expensive":
+	  ItemClass item = new ItemClass();
+		item = test.getMostExpensive();
+		
+		
+		List<String> listName = new ArrayList<>(item.getTitle());
+		List<String> listPrice = new ArrayList<>(item.getPrice());
+		List<String> listCategory = new ArrayList<>(item.getCategory());
+		
+		
+		for (int i=0; i < listName.size(); i++){
+			out.println("Category:  " + listCategory.get(i) + "<br>");
+			out.println("Item Name:  " +listName.get(i) + "<br>");
+			out.println("Price:  " + listPrice.get(i) + "<br> <hr> <br>");}
+	  
+	  break;
+
 // ========================================================
 // DEFAULT CASE
 // ========================================================
@@ -143,7 +164,7 @@ switch(htmlFormName) {
    public void printItem(ItemClass item, ServletResponse response) throws IOException{
 	
 	PrintWriter out = response.getWriter();
-	List<String> listName = new ArrayList<>(item.getID());
+	List<String> listName = new ArrayList<>(item.getTitle());
 	List<String> listPrice = new ArrayList<>(item.getPrice());
 	for (int i = 0; i < listName.size(); i++)
 	out.println("<br> Item Name:  " +listName.get(i) + "<br>");

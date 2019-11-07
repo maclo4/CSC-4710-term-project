@@ -32,11 +32,19 @@
 </form> 
 
 <br><br>
+
+<!-- CATEGORY SEARCH -->
 <form action="controller.jsp" method="POST" >
   Search Items By Category <br>
   <input type="text" name="SearchCategory"><br>
   <input type = "hidden" name ="FormName" value ="CategorySearch" >
   <input type="submit" value="submit"></form>
+
+
+<!-- LIST MOST EXPENSIVE -->
+<form action="controller.jsp" method="POST" > <br>
+  <input type = "hidden" name ="FormName" value ="Expensiveo;" >
+  <input type="submit" value="List Most Expensive"></form>
 
 </body>
 </html>
