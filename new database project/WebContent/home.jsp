@@ -34,7 +34,7 @@
 <br><br>
 <form action="controller.jsp" method="POST" >
   Search Items By Category <br>
-  <input type="text" name="CategorySearch"><br>
+  <input type="text" name="SearchCategory"><br>
   <input type = "hidden" name ="FormName" value ="CategorySearch" >
   <input type="submit" value="submit"></form>
 

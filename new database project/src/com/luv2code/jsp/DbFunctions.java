@@ -143,6 +143,7 @@ public class DbFunctions extends HttpServlet{
 	  public boolean insertUser(String userID, String password, String email,
 			  String firstName, String lastName, String gender, String age, Boolean admin) throws SQLException {
 		  
+		  connect_func();
 		  //store sql statement as string
 		  String sql0 = "INSERT INTO Users(UserID, Password, Email, FirstName, LastName, Gender, Age, Admin)\r\n" + 
 		  		" VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -178,44 +179,40 @@ public class DbFunctions extends HttpServlet{
 	// =======================================================
 	// SEARCH FOR AN ITEM BASED ON THE CATEGORY
 	//========================================================
-	  public ReturnObject categorySearch(String category) throws SQLException{
+	  public ItemClass categorySearch(String category) throws SQLException{
 		  
-		  ReturnObject Items = new ReturnObject();
+		  connect_func();
+		  ItemClass Items = new ItemClass();
 		  
-		  String sql0 = "SELECT * FROM ItemCategories WHERE Category = ?";
-		  System.out.println("Inside the search function");
-			
-			 preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
-			preparedStatement.setString(1, category);
-				
-			
+		  String sql0 = "SELECT * \r\n" + 
+		  		"FROM Items I\r\n" + 
+		  		"WHERE ID IN (\r\n" + 
+		  		"SELECT ItemID\r\n" + 
+		  		"FROM ItemCategories\r\n" + 
+		  		"WHERE Category = ?)";
+		  
+		  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		  preparedStatement.setString(1, category);
+		  
 				// try blocks so that the system doesn't crash when sql statements are rejected
 				try {
 				ResultSet resultSet2 = preparedStatement.executeQuery();
-				 System.out.println("Inside the search function try block " + resultSet);
-				// System.out.println(resultSet.next());
-		        
-		        
+				
 		        // class that holds data for this type of search
-		        List<String> ItemList = new ArrayList<>();
-		        
-		        
-		        
+		        List<String> PriceList = new ArrayList<>();
+		        List<String> IDList = new ArrayList<>();
 		        while(resultSet2.next()) {
-		        	System.out.println("line 203");
-		        	ItemList.add(resultSet2.getString("Category"));
+		        	PriceList.add(resultSet2.getString("Price"));
+		        	IDList.add(resultSet2.getString("title"));
+		        	
 		        }
 		       
-		        System.out.println("line 206" + ItemList);
-		        Items.setCategories(ItemList);
-		        System.out.println("line 208");
+		        Items.setPrice(PriceList);
+		        Items.setID(IDList);
 		        preparedStatement.close();
-		        System.out.println("line 210");
 				}
 				catch(Exception e) {
-					System.out.println(e);
-					 System.out.println("Inside the search function catch block");}
-//		        disconnect();
+					System.out.println(e);}
 		        
 				return Items;
 		  }

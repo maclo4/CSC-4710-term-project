@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import = "com.luv2code.jsp.*" %>
 <%@ page import = "com.luv2code.jsp.AuthenticateServlet" %>
+<%@ page import = "com.luv2code.jsp.DbFunctions" %>
 <%@ page import="java.sql.*" %> 
 <%@ page import="java.io.*" %>
 <%@ page import="java.sql.Statement" %>
@@ -101,15 +102,13 @@ switch(htmlFormName) {
 	  test.insertItem(ItemName, Price, Description);
 	  test.insertCategory(ItemName, Category);
 	  
+	 // test.insertCategory("iPhone", "more trash 2.0");
 	  // display item
-	  //ReturnObject categories = new ReturnObject();
-	  //categories = test.categorySearch(Category);
-	  //List<String> readCat = new ArrayList<>(categories.getCategories());
+	  /* ReturnObject categories = new ReturnObject();
+	  categories = test.categorySearch("fruit");
+	  List<String> readCat = new ArrayList<>(categories.getCategories());
 	  
-	  //output.println("Printing in the controller jsp!!! " +readCat.get(0));
-	  
-	  
-	  
+	  output.println("Printing in the controller jsp!!! " +readCat.get(0)); */
 		break;
 // ========================================================	  
 // SEARCH BY CATEGORY
@@ -117,14 +116,19 @@ switch(htmlFormName) {
   case "CategorySearch":
 	  
 	output.println("Form submitted: " + htmlFormName);
+	try{
+		String ItemCategory = request.getParameter("SearchCategory");
+		ItemClass item = new ItemClass();
+		item = test.categorySearch(ItemCategory);
+		List<String> readCat = new ArrayList<>(item.getPrice());
+		
+		
+		output.println("Category found:  " +readCat.get(0));
+		printItem(item, response);
+		}
+	catch(Exception e){System.out.println(e);}
+	
 	  // display item
-	  Category = request.getParameter("CategorySearch");
-	  output.println(Category);
-	  ReturnObject categories = new ReturnObject();
-	  categories = test.categorySearch(Category);
-	  List<String> readCat = new ArrayList<>(categories.getCategories());
-	  
-	  output.println("Printing in the controller jsp!!! " +readCat.get(0));
 	  
 		break;
 // ========================================================
@@ -133,5 +137,16 @@ switch(htmlFormName) {
   default:
     // code block
 }
+%>
 
+<%! 
+   public void printItem(ItemClass item, ServletResponse response) throws IOException{
+	
+	PrintWriter out = response.getWriter();
+	List<String> listName = new ArrayList<>(item.getID());
+	List<String> listPrice = new ArrayList<>(item.getPrice());
+	for (int i = 0; i < listName.size(); i++)
+	out.println("<br> Item Name:  " +listName.get(i) + "<br>");
+	
+	}
 %>
