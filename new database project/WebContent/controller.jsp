@@ -30,15 +30,9 @@ switch(htmlFormName) {
 // ====================================================================
   case "Authenticate":
     // code block
-     String action = request.getServletPath();
-     System.out.println("inside the authenticate" + htmlFormName);
     
-     output.println("it workeddd" + action + "  :  " + htmlFormName);
-     
-     // actual code is here. Above is debugging
-   
      // get http parameters
-     String username = request.getParameter("Username");
+    String username = request.getParameter("Username");
  	String password = request.getParameter("Password");
  	
  	out.println(username + " " + password);
@@ -144,14 +138,36 @@ switch(htmlFormName) {
 		List<String> listPrice = new ArrayList<>(item.getPrice());
 		List<String> listCategory = new ArrayList<>(item.getCategory());
 		
-		
+		System.out.println("outside getExpensive for loop");
 		for (int i=0; i < listName.size(); i++){
+			System.out.println("inside getExpensive for loop");
 			out.println("Category:  " + listCategory.get(i) + "<br>");
 			out.println("Item Name:  " +listName.get(i) + "<br>");
 			out.println("Price:  " + listPrice.get(i) + "<br> <hr> <br>");}
 	  
 	  break;
+	  
 
+// ========================================================
+// ADD FAVORITE ITEM
+// ========================================================
+  case "AddFavorite":
+	  
+	Object sessionUserObject = session.getAttribute("Username");
+	String sessionUser = String.valueOf(sessionUserObject);
+	System.out.println(sessionUser);
+	
+	String FavItem = request.getParameter("FavItem");
+	output.println(sessionUser + "  "+ FavItem);
+	
+	test.addFavItem(sessionUser, FavItem);
+	
+// ========================================================
+// ADD FAVORITE ITEM
+// ========================================================
+  case "AddReview":
+ 		
+	  break;
 // ========================================================
 // DEFAULT CASE
 // ========================================================

@@ -137,6 +137,31 @@ public class DbFunctions extends HttpServlet{
 //	        disconnect();
 	        return rowInserted;
 	  }
+	  
+//========================================================
+// INSERT FAVORITE ITEM INTO DATABASE
+//========================================================
+		  public boolean addFavItem(String username, String itemName) throws SQLException {
+			  connect_func();
+			  String sql0 = "INSERT INTO FavoriteItems (Username, ItemID) \r\n" + 
+			  		"SELECT ?, ID \r\n" + 
+			  		"FROM Items\r\n" + 
+			  		"WHERE title = ?";	
+			  Boolean rowInserted = false;
+			  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+				preparedStatement.setString(1, username);
+				preparedStatement.setString(2, itemName);
+			
+				// try blocks so that the system doesn't crash when sql statements are rejected
+				try {
+				rowInserted = preparedStatement.executeUpdate() > 0;
+		        preparedStatement.close();}
+				catch(Exception e) {
+					System.out.println(e);}
+				
+				
+		        return rowInserted;
+		  }
 	//========================================================
 	// INSERT USER INTO DATABASE
 	//========================================================
@@ -282,6 +307,7 @@ public class DbFunctions extends HttpServlet{
 		 	String sql0 = "DROP TABLE IF EXISTS ItemCategories";
 		 	String sql1 = "drop table IF EXISTS Items" ;
 		 	String sql12 = "DROP TABLE IF EXISTS Users";
+		 	String sql123 = "DROP TABLE IF EXISTS FavoriteItems";
 		 		
 		 	String sql2 =	"CREATE TABLE Items(" + 
 		 			"Title varchar(50)," + 
@@ -311,14 +337,24 @@ public class DbFunctions extends HttpServlet{
 		 			"CHECK (Gender='Male' OR Gender = \"Female\" OR Gender = \"Non-binary\")," + 
 		 			"CHECK (Email like '%_@__%.__%'));";
 		 	
+		 	String sql5 = "create table FavoriteItems(\r\n" + 
+		 			"Username varchar(50) NOT NULL,\r\n" + 
+		 			"ItemID int NOT NULL,\r\n" + 
+		 			"-- ID int NOT NULL AUTO_INCREMENT,\r\n" + 
+		 			"FOREIGN KEY (Username) REFERENCES Users(UserID),\r\n" + 
+		 			"FOREIGN KEY (ItemId) REFERENCES Items(ID),\r\n" + 
+		 			"PRIMARY KEY(Username, ItemID))";
+		 	
 		 	// drop the tables then recreate them
 		 	statement =  (Statement) connect.createStatement();
+		 	statement.executeUpdate(sql123);
 		 	statement.executeUpdate(sql0);
 		 	statement.executeUpdate(sql1);
 		 	statement.executeUpdate(sql12);
 		 	statement.executeUpdate(sql2);
 		 	statement.executeUpdate(sql3);
 		 	statement.executeUpdate(sql4);
+		 	statement.executeUpdate(sql5);
 		 	
 		 	System.out.println("tables created.");
 		 	
@@ -350,17 +386,13 @@ public class DbFunctions extends HttpServlet{
 		 	
 		 	// initialize user table
 		 	test.insertUser("root", "pass1234", "scott@gmail.com", "Scott", "Howard", "Male", "22", true);
+		 	test.insertUser("maclo4", "pass1234", "maclo4@gmail.com", "Scott", "Howard", "Male", "22", false);
+		 	test.insertUser("evan", "pass1234", "evan@gmail.com", "evan", "nguyen", "Male", "21", false);
+		 	test.insertUser("corey", "pass1234", "scott@gmail.com", "corey", "tessler", "Male", "28", false);
+		 	
+		 	
 	        return true;
-			/*String sql = "insert into Items(title, price) values (?, ?)";
-			preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-			preparedStatement.setString(1, item);
-			preparedStatement.setString(2, price);
 			
-//			preparedStatement.executeUpdate();
-			 boolean rowInserted = preparedStatement.executeUpdate() > 0;
-		        preparedStatement.close();
-//		        disconnect();
-		        return rowInserted;*/
 	  }
 	  
 	  
