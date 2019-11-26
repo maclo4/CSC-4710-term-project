@@ -22,6 +22,7 @@ DbFunctions test = new DbFunctions();
 Statement statement = null;
 ResultSet results = null;
 PrintWriter output = response.getWriter();
+String redirectURL;
 
 switch(htmlFormName) {
 
@@ -54,13 +55,13 @@ switch(htmlFormName) {
  	{
  		out.println("<br> authenticated: redirect here in future parts");
  		session.setAttribute("Username", username); 
- 		String redirectURL = "home.jsp";
+ 		redirectURL = "home.jsp";
  		response.sendRedirect(redirectURL);
  	}
  	else {
  	
  		out.println("<br> Incorrect password or username: redirect here in future parts");
- 		String redirectURL = "index.jsp";
+ 		redirectURL = "index.jsp";
  		response.sendRedirect(redirectURL);
  	}
  	out.println(session.getAttribute("Username"));
@@ -73,7 +74,7 @@ switch(htmlFormName) {
   case "Initialize":
     // code block
     test.initializeDb();
-    String redirectURL = "index.jsp";
+    redirectURL = "index.jsp";
     response.sendRedirect(redirectURL);
     break;
   
@@ -114,11 +115,15 @@ switch(htmlFormName) {
 		String ItemCategory = request.getParameter("SearchCategory");
 		ItemClass item = new ItemClass();
 		item = test.categorySearch(ItemCategory);
-		List<String> readCat = new ArrayList<>(item.getPrice());
+		List<String> readCat = new ArrayList<>(item.getTitle());
 		
 		
-		output.println("Category found:  " +readCat.get(0));
-		printItem(item, response);
+		output.print(" <br> " + ItemCategory +  " items: " );
+		for(String currItem : readCat)
+		{
+			output.println(" <br>" + currItem);
+		}
+		//printItem(item, response);
 		}
 	catch(Exception e){System.out.println(e);}
 	
@@ -158,14 +163,42 @@ switch(htmlFormName) {
 	System.out.println(sessionUser);
 	
 	String FavItem = request.getParameter("FavItem");
-	output.println(sessionUser + "  "+ FavItem);
+	output.println(sessionUser + ": fav item:  "+ FavItem);
 	
 	test.addFavItem(sessionUser, FavItem);
+	
+	// redirect back
+	redirectURL = "home.jsp";
+	response.sendRedirect(redirectURL);
+	
+// ========================================================
+// ADD REVIEW
+// ========================================================
+  case "AddReview":
+ 		
+	  break;
+
 	
 // ========================================================
 // ADD FAVORITE ITEM
 // ========================================================
-  case "AddReview":
+  case "DeleteFavorite":
+	  
+	  // these variables are defined on line 160 in the add favorite case
+	  sessionUserObject = session.getAttribute("Username");
+		sessionUser = String.valueOf(sessionUserObject);
+		System.out.println(sessionUser);
+		
+		// get the form parameter
+		String deleteItemID = request.getParameter("DeleteItem");
+		output.println(sessionUser + ": deleted item:  "+ deleteItemID);
+		
+		// dbFunction variable that calls deleteFavItem function
+		test.deleteFavItem(sessionUser, deleteItemID);
+		
+		// redirect back
+		redirectURL = "home.jsp";
+    	response.sendRedirect(redirectURL);
  		
 	  break;
 // ========================================================

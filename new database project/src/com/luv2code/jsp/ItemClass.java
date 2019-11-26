@@ -11,6 +11,7 @@ public class ItemClass {
 	private List<String> description = new ArrayList<>();
 	private List<String> datePosted = new ArrayList<>();
 	private List<String> category = new ArrayList<>();
+	private List<String> username = new ArrayList<>();
 	
 	public List<String> getTitle(){
 		
@@ -21,7 +22,18 @@ public class ItemClass {
 			title.clear();
 		}
 		title.addAll(p_title);
-		System.out.println(title.get(0));
+		System.out.println("This the title that just got added to an itemClass object: " +title.get(0));
+	}
+	public List<String> getUsername(){
+		
+		return username;
+	}
+	public void setUsername(List<String> p_username) {
+		if(!username.isEmpty()) {
+			username.clear();
+		}
+		username.addAll(p_username);
+		System.out.println(username.get(0));
 	}
 
 	public List<String> getCategory(){

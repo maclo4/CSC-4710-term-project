@@ -1,4 +1,5 @@
 package com.luv2code.jsp;
+import com.luv2code.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -117,52 +118,6 @@ public class DbFunctions extends HttpServlet{
 		    }     
 	  
 	//========================================================
-	// INSERT CATEGORY INTO DATABASE
-	//========================================================
-	  public boolean insertCategory(String item, String category) throws SQLException {
-		  String sql0 = "INSERT INTO ItemCategories(ItemID, Category) VALUES (" + 
-		  		"	(SELECT ID FROM Items WHERE title = ?)," + 
-		  		"     ?)";	
-		  Boolean rowInserted = false;
-		  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
-			preparedStatement.setString(1, item);
-			preparedStatement.setString(2, category);
-		
-			// try blocks so that the system doesn't crash when sql statements are rejected
-			try {
-			rowInserted = preparedStatement.executeUpdate() > 0;
-	        preparedStatement.close();}
-			catch(Exception e) {
-				System.out.println(e);}
-//	        disconnect();
-	        return rowInserted;
-	  }
-	  
-//========================================================
-// INSERT FAVORITE ITEM INTO DATABASE
-//========================================================
-		  public boolean addFavItem(String username, String itemName) throws SQLException {
-			  connect_func();
-			  String sql0 = "INSERT INTO FavoriteItems (Username, ItemID) \r\n" + 
-			  		"SELECT ?, ID \r\n" + 
-			  		"FROM Items\r\n" + 
-			  		"WHERE title = ?";	
-			  Boolean rowInserted = false;
-			  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
-				preparedStatement.setString(1, username);
-				preparedStatement.setString(2, itemName);
-			
-				// try blocks so that the system doesn't crash when sql statements are rejected
-				try {
-				rowInserted = preparedStatement.executeUpdate() > 0;
-		        preparedStatement.close();}
-				catch(Exception e) {
-					System.out.println(e);}
-				
-				
-		        return rowInserted;
-		  }
-	//========================================================
 	// INSERT USER INTO DATABASE
 	//========================================================
 	  public boolean insertUser(String userID, String password, String email,
@@ -197,9 +152,125 @@ public class DbFunctions extends HttpServlet{
 			catch(Exception e) {
 				System.out.println(e);
 			}
-
+	
 		        return rowInserted;
 	  }
+
+	//========================================================
+	// INSERT CATEGORY INTO DATABASE
+	//========================================================
+	  public boolean insertCategory(String item, String category) throws SQLException {
+		  String sql0 = "INSERT INTO ItemCategories(ItemID, Category) VALUES (" + 
+		  		"	(SELECT ID FROM Items WHERE title = ?)," + 
+		  		"     ?)";	
+		  Boolean rowInserted = false;
+		  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+			preparedStatement.setString(1, item);
+			preparedStatement.setString(2, category);
+		
+			// try blocks so that the system doesn't crash when sql statements are rejected
+			try {
+			rowInserted = preparedStatement.executeUpdate() > 0;
+	        preparedStatement.close();}
+			catch(Exception e) {
+				System.out.println(e);}
+//	        disconnect();
+	        return rowInserted;
+	  }
+	  
+//========================================================
+// INSERT FAVORITE ITEM INTO DATABASE
+//========================================================
+  public boolean addFavItem(String username, String itemName) throws SQLException {
+	  connect_func();
+	  String sql0 = "INSERT INTO FavoriteItems (Username, ItemID, Title) \r\n" + 
+	  		"SELECT ?, ID, title \r\n" + 
+	  		"FROM Items\r\n" + 
+	  		"WHERE title = ?";	
+	  Boolean rowInserted = false;
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		preparedStatement.setString(1, username);
+		preparedStatement.setString(2, itemName);
+	
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+		rowInserted = preparedStatement.executeUpdate() > 0;
+        preparedStatement.close();}
+		catch(Exception e) {
+			System.out.println(e);}
+		
+		
+        return rowInserted;
+  }
+  
+//========================================================
+// DELETE FAVORITE ITEM FROM DATABASE
+//========================================================
+ public boolean deleteFavItem(String username, String itemID) throws SQLException {
+	  connect_func();
+	  String sql0 = "DELETE FROM FavoriteItems WHERE ItemID = ? AND Username = ?";	
+	  Boolean rowInserted = false;
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		preparedStatement.setString(1, itemID);
+		preparedStatement.setString(2, username);
+	
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+		rowInserted = preparedStatement.executeUpdate() > 0;
+       preparedStatement.close();}
+		catch(Exception e) {
+			System.out.println(e);}
+		
+		
+       return rowInserted;
+ }
+  
+// =======================================================
+// SEARCH FOR FAVORITE ITEMS
+//========================================================
+  public ItemClass SearchFavorites(String username) throws SQLException{
+	  connect_func();
+	  ItemClass Items = new ItemClass();
+		  
+	  System.out.println(username);
+	  String sql0 = "SELECT * FROM FavoriteItems WHERE Username = ? ";
+		preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		preparedStatement.setString(1, username);
+  //Statement statement2 = (Statement) connect.createStatement();
+	  
+	// try blocks so that the system doesn't crash when sql statements are rejected
+	try {
+		
+		resultSet = preparedStatement.executeQuery();
+		
+        // class that holds data for this type of search
+        List<String> usernameList = new ArrayList<>();
+        List<String> IDList = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
+        
+        System.out.println("line 359, search favorites");
+        while(resultSet.next()) {
+        	
+        	usernameList.add(resultSet.getString("Username"));
+        	titleList.add(resultSet.getString("Title"));
+        	IDList.add(resultSet.getString("ItemID"));
+        	
+        	}
+	       
+        
+        Items.setUsername(usernameList);
+        Items.setID(IDList);
+        Items.setTitle(titleList);
+        
+        
+        preparedStatement.close();
+			}
+	catch(Exception e) {
+		System.out.println("Search Favorites error: " + e);}
+	        
+	return Items;
+	  }
+
 	//========================================================
 	// SEARCH: GET MOST EXPENSIVE
 	//========================================================
@@ -277,15 +348,15 @@ public class DbFunctions extends HttpServlet{
 				
 		        // class that holds data for this type of search
 		        List<String> PriceList = new ArrayList<>();
-		        List<String> IDList = new ArrayList<>();
+		        List<String> TitleList = new ArrayList<>();
 		        while(resultSet2.next()) {
 		        	PriceList.add(resultSet2.getString("Price"));
-		        	IDList.add(resultSet2.getString("title"));
+		        	TitleList.add(resultSet2.getString("title"));
 		        	
 		        }
 		       
 		        Items.setPrice(PriceList);
-		        Items.setID(IDList);
+		        Items.setTitle(TitleList);
 		        preparedStatement.close();
 				}
 				catch(Exception e) {
@@ -294,8 +365,45 @@ public class DbFunctions extends HttpServlet{
 				return Items;
 		  }
 	  
-	  
-	//========================================================
+// =======================================================
+// SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+	  public ItemClass SearchItems() throws SQLException{
+		  connect_func();
+		  ItemClass Items = new ItemClass();
+			  
+		  String sql0 = "SELECT * FROM Items";
+		  statement =  (Statement) connect.createStatement();
+		  //Statement statement2 = (Statement) connect.createStatement();
+			  
+			// try blocks so that the system doesn't crash when sql statements are rejected
+			try {
+				resultSet = statement.executeQuery(sql0);
+					
+		        // class that holds data for this type of search
+		        List<String> priceList = new ArrayList<>();
+		        List<String> IDList = new ArrayList<>();
+		        List<String> titleList = new ArrayList<>();
+		        
+		        while(resultSet.next()) {
+		        	priceList.add(resultSet.getString("Price"));
+		        	IDList.add(resultSet.getString("ID"));
+		        	titleList.add(resultSet.getString("Title"));
+		        	}
+			       
+		        Items.setPrice(priceList);
+		        Items.setTitle(titleList);
+		        Items.setID(IDList);
+		        System.out.println(Items.getID());
+		        statement.close();
+					}
+			catch(Exception e) {
+				System.out.println(e);}
+			        
+			return Items;
+			  }
+	
+//========================================================
 	  // big function that just initializes all the necessary
 	  // tables using other insert functions
 	//========================================================
@@ -337,13 +445,14 @@ public class DbFunctions extends HttpServlet{
 		 			"CHECK (Gender='Male' OR Gender = \"Female\" OR Gender = \"Non-binary\")," + 
 		 			"CHECK (Email like '%_@__%.__%'));";
 		 	
-		 	String sql5 = "create table FavoriteItems(\r\n" + 
+		 	String sql5 ="create table FavoriteItems(\r\n" + 
 		 			"Username varchar(50) NOT NULL,\r\n" + 
 		 			"ItemID int NOT NULL,\r\n" + 
+		 			"Title	varchar(50) NOT NULL,\r\n" + 
 		 			"-- ID int NOT NULL AUTO_INCREMENT,\r\n" + 
 		 			"FOREIGN KEY (Username) REFERENCES Users(UserID),\r\n" + 
 		 			"FOREIGN KEY (ItemId) REFERENCES Items(ID),\r\n" + 
-		 			"PRIMARY KEY(Username, ItemID))";
+		 			"PRIMARY KEY(Username, ItemID));";
 		 	
 		 	// drop the tables then recreate them
 		 	statement =  (Statement) connect.createStatement();
