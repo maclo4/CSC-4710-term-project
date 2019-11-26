@@ -24,6 +24,10 @@ ResultSet results = null;
 PrintWriter output = response.getWriter();
 String redirectURL;
 
+// get user
+Object sessionUserObject = session.getAttribute("Username");
+String sessionUser = String.valueOf(sessionUserObject);
+
 switch(htmlFormName) {
 
 // ====================================================================
@@ -158,8 +162,8 @@ switch(htmlFormName) {
 // ========================================================
   case "AddFavorite":
 	  
-	Object sessionUserObject = session.getAttribute("Username");
-	String sessionUser = String.valueOf(sessionUserObject);
+	sessionUserObject = session.getAttribute("Username");
+	sessionUser = String.valueOf(sessionUserObject);
 	System.out.println(sessionUser);
 	
 	String FavItem = request.getParameter("FavItem");
@@ -171,6 +175,44 @@ switch(htmlFormName) {
 	redirectURL = "home.jsp";
 	response.sendRedirect(redirectURL);
 	
+	break;
+	
+// =========================================================
+// ADD FAVORITE SELLER
+// =========================================================
+  case "AddFavoriteSeller":
+	  
+		System.out.println(sessionUser);
+		
+		String FavSeller = request.getParameter("FavSeller");
+		output.println(sessionUser + ": fav seller:  "+ FavSeller);
+		
+		test.addFavSeller(FavSeller, sessionUser);
+		
+		// redirect back
+		redirectURL = "home.jsp";
+		response.sendRedirect(redirectURL);
+		
+		break;
+
+// =========================================================
+// ADD FAVORITE SELLER
+// =========================================================
+  case "DeleteFavoriteSeller":
+	  
+		System.out.println("User to delete: " + sessionUser);
+		
+		FavSeller = request.getParameter("DeleteFavSeller");
+		System.out.println(sessionUser + ": fav seller:  "+ FavSeller);
+		
+		test.deleteFavSeller(sessionUser, FavSeller);
+		
+		// redirect back
+		redirectURL = "home.jsp";
+		response.sendRedirect(redirectURL);
+		
+		break;
+			
 // ========================================================
 // ADD REVIEW
 // ========================================================

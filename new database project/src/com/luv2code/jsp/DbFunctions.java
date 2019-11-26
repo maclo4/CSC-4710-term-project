@@ -177,7 +177,29 @@ public class DbFunctions extends HttpServlet{
 //	        disconnect();
 	        return rowInserted;
 	  }
+
 	  
+//========================================================
+// INSERT FAVORITE ITEM INTO DATABASE
+//========================================================
+  public boolean addFavSeller(String favSeller, String username) throws SQLException {
+	  connect_func();
+	  String sql0 = "INSERT INTO FavoriteSellers (Username, FavoriteSeller) VALUES (?, ?)";	
+	  Boolean rowInserted = false;
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		preparedStatement.setString(1, username);
+		preparedStatement.setString(2, favSeller);
+	
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+		rowInserted = preparedStatement.executeUpdate() > 0;
+        preparedStatement.close();}
+		catch(Exception e) {
+			System.out.println(e);}
+		
+		
+        return rowInserted;
+  }	  
 //========================================================
 // INSERT FAVORITE ITEM INTO DATABASE
 //========================================================
@@ -224,11 +246,32 @@ public class DbFunctions extends HttpServlet{
 		
        return rowInserted;
  }
-  
+
+//========================================================
+//DELETE FAVORITE ITEM FROM DATABASE
+//========================================================
+public boolean deleteFavSeller(String username, String favSeller) throws SQLException {
+	  connect_func();
+	  String sql0 = "DELETE FROM FavoriteSellers WHERE Username = ? AND FavoriteSeller = ?";	
+	  Boolean rowInserted = false;
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		preparedStatement.setString(1, username);
+		preparedStatement.setString(2, favSeller);
+	
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+		rowInserted = preparedStatement.executeUpdate() > 0;
+     preparedStatement.close();}
+		catch(Exception e) {
+			System.out.println(e);}
+		
+		
+     return rowInserted;
+}
 // =======================================================
 // SEARCH FOR FAVORITE ITEMS
 //========================================================
-  public ItemClass SearchFavorites(String username) throws SQLException{
+  public ItemClass getFavoriteItems(String username) throws SQLException{
 	  connect_func();
 	  ItemClass Items = new ItemClass();
 		  
@@ -266,11 +309,51 @@ public class DbFunctions extends HttpServlet{
         preparedStatement.close();
 			}
 	catch(Exception e) {
-		System.out.println("Search Favorites error: " + e);}
+		System.out.println("Get Favorite Items error: " + e);}
 	        
 	return Items;
 	  }
 
+//=======================================================
+//SEARCH FOR FAVORITE ITEMS
+//========================================================
+ public ItemClass getFavoriteSellers(String username) throws SQLException{
+	  connect_func();
+	  ItemClass Items = new ItemClass();
+		  
+	  System.out.println(username);
+	  String sql0 = "SELECT * FROM FavoriteSellers WHERE Username = ? ";
+		preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+		preparedStatement.setString(1, username);
+ //Statement statement2 = (Statement) connect.createStatement();
+	  
+	// try blocks so that the system doesn't crash when sql statements are rejected
+	try {
+		
+		resultSet = preparedStatement.executeQuery();
+		
+       // class that holds data for this type of search
+       List<String> favoriteSellersList = new ArrayList<>();
+
+       while(resultSet.next()) {
+       	
+       	favoriteSellersList.add(resultSet.getString("FavoriteSeller"));
+       	
+       	}
+	       
+       
+       Items.setUsername(favoriteSellersList);
+       
+       preparedStatement.close();
+			}
+	catch(Exception e) {
+		System.out.println("Get Favorite Seller error: " + e);}
+	        
+	return Items;
+	  }
+
+  
+  
 	//========================================================
 	// SEARCH: GET MOST EXPENSIVE
 	//========================================================
@@ -394,7 +477,7 @@ public class DbFunctions extends HttpServlet{
 		        Items.setPrice(priceList);
 		        Items.setTitle(titleList);
 		        Items.setID(IDList);
-		        System.out.println(Items.getID());
+		       
 		        statement.close();
 					}
 			catch(Exception e) {
@@ -402,11 +485,46 @@ public class DbFunctions extends HttpServlet{
 			        
 			return Items;
 			  }
-	
+
+
+// =======================================================
+// SEARCH FOR AN ITEM BASED ON THE CATEGORY
 //========================================================
-	  // big function that just initializes all the necessary
-	  // tables using other insert functions
-	//========================================================
+  public ItemClass getUsers() throws SQLException{
+	  	connect_func();
+	  	ItemClass users = new ItemClass();
+				  
+	  	String sql0 = "SELECT * FROM Users";
+	  	statement =  (Statement) connect.createStatement();
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = statement.executeQuery(sql0);
+				
+		// class that holds data for this type of search
+		
+		List<String> usernameList = new ArrayList<>();
+		
+		while(resultSet.next()) {
+			usernameList.add(resultSet.getString("UserID"));
+		    	}
+		       
+	    users.setUsername(usernameList);
+	    
+	    statement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return users;
+
+  }
+
+//========================================================
+  // big function that just initializes all the necessary
+  // tables using other insert functions
+//========================================================
 	  public boolean initializeDb() throws SQLException{
 		  
 		 	connect_func();  
@@ -416,6 +534,7 @@ public class DbFunctions extends HttpServlet{
 		 	String sql1 = "drop table IF EXISTS Items" ;
 		 	String sql12 = "DROP TABLE IF EXISTS Users";
 		 	String sql123 = "DROP TABLE IF EXISTS FavoriteItems";
+		 	String sql1234 = "DROP TABLE IF EXISTS FavoriteSellers";
 		 		
 		 	String sql2 =	"CREATE TABLE Items(" + 
 		 			"Title varchar(50)," + 
@@ -454,9 +573,18 @@ public class DbFunctions extends HttpServlet{
 		 			"FOREIGN KEY (ItemId) REFERENCES Items(ID),\r\n" + 
 		 			"PRIMARY KEY(Username, ItemID));";
 		 	
+		 	String sql6="create table FavoriteSellers(\r\n" + 
+		 			"Username varchar(50) NOT NULL,\r\n" + 
+		 			"FavoriteSeller varchar(50) NOT NULL,\r\n" + 
+		 			"FOREIGN KEY (Username) REFERENCES Users(UserID),\r\n" + 
+		 			"FOREIGN KEY (FavoriteSeller) REFERENCES Users(UserID),\r\n" + 
+		 			"PRIMARY KEY(Username, FavoriteSeller))";
+		 	
 		 	// drop the tables then recreate them
+		 	try {
 		 	statement =  (Statement) connect.createStatement();
 		 	statement.executeUpdate(sql123);
+		 	statement.executeUpdate(sql1234);
 		 	statement.executeUpdate(sql0);
 		 	statement.executeUpdate(sql1);
 		 	statement.executeUpdate(sql12);
@@ -464,6 +592,11 @@ public class DbFunctions extends HttpServlet{
 		 	statement.executeUpdate(sql3);
 		 	statement.executeUpdate(sql4);
 		 	statement.executeUpdate(sql5);
+		 	statement.executeUpdate(sql6);
+		 	}
+		 	catch(Exception e) {
+		 		System.out.println("Initialize failed: " + e);
+		 	}
 		 	
 		 	System.out.println("tables created.");
 		 	
