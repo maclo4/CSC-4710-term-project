@@ -172,7 +172,7 @@ PrintWriter output = response.getWriter();
    
    
  <%
-  		ItemClass userList = new ItemClass();
+  		UserClass userList = new UserClass();
         //user = String.valueOf(session.getAttribute("Username"));
         userList = dbFunctions.getUsers();
         List<String> listAllSellers = new ArrayList<>(userList.getUsername());

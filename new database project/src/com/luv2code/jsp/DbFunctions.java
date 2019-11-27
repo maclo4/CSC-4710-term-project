@@ -490,9 +490,9 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 // =======================================================
 // SEARCH FOR AN ITEM BASED ON THE CATEGORY
 //========================================================
-  public ItemClass getUsers() throws SQLException{
+  public UserClass getUsers() throws SQLException{
 	  	connect_func();
-	  	ItemClass users = new ItemClass();
+	  	UserClass users = new UserClass();
 				  
 	  	String sql0 = "SELECT * FROM Users";
 	  	statement =  (Statement) connect.createStatement();
@@ -520,6 +520,19 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		return users;
 
   }
+  
+  
+
+//========================================================
+  // Search for user
+//========================================================
+ public Boolean searchUsers(String username) throws SQLException{
+	 
+	 UserClass allUsers = getUsers();
+	 List<String> userList = allUsers.getUsername();
+	 return userList.contains(username);
+	
+ }
 
 //========================================================
   // big function that just initializes all the necessary

@@ -8,7 +8,8 @@
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import= "java.util.List" %>
-
+<%@ page import= "java.util.regex.Matcher"%>
+<%@ page import= "java.util.regex.Pattern"%>
 
 <%
 	// I made this page because I couldnt figure out how to use the servlets to cntralize calling functions 
@@ -244,6 +245,41 @@ switch(htmlFormName) {
  		
 	  break;
 // ========================================================
+// ADD FAVORITE ITEM
+// ========================================================
+  case "NewUser":
+	  String newPassword = request.getParameter("Password");
+	  String verifyPassword = request.getParameter("VerifyPassword");
+	  String email = request.getParameter("Email");
+	  String newUsername = request.getParameter("Username");
+	  String firstName = request.getParameter("FirstName");
+	  String lastName = request.getParameter("LastName");
+	  String gender = request.getParameter("Gender");
+	  String age = request.getParameter("Age");
+	  
+	  Boolean validateEmail = validEmail(email);
+	  
+	  if(!test.searchUsers(newUsername) && newPassword.equals(verifyPassword) && validateEmail){
+		  output.println("new user validated");
+	 		test.insertUser(newUsername,newPassword, email,
+	 				  firstName, lastName, gender, age, false);
+	 		
+	 		// redirect back
+			session.setAttribute("ValidUser", "Valid Inputs");
+			redirectURL = "index.jsp";
+	    	response.sendRedirect(redirectURL);
+	  }
+	  else{
+		// redirect back
+			session.setAttribute("ValidUser", "Invalid Inputs");
+			redirectURL = "index.jsp";
+	    	response.sendRedirect(redirectURL);
+		}
+	  
+	  
+ 		
+	  break;
+// ========================================================
 // DEFAULT CASE
 // ========================================================
   default:
@@ -252,6 +288,19 @@ switch(htmlFormName) {
 %>
 
 <%! 
+public static boolean validEmail(String email) 
+{ 
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                        "[a-zA-Z0-9_+&*-]+)*@" + 
+                        "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                        "A-Z]{2,7}$"; 
+                          
+    Pattern pat = Pattern.compile(emailRegex); 
+    if (email == null) 
+        return false; 
+    return pat.matcher(email).matches(); 
+} 
+
    public void printItem(ItemClass item, ServletResponse response) throws IOException{
 	
 	PrintWriter out = response.getWriter();
