@@ -94,15 +94,17 @@ public class DbFunctions extends HttpServlet{
 	//========================================================
 	// INSERT ITEM INTO DATABASE
 	//========================================================
-	  public boolean insertItem(String item, String price, String description) throws SQLException {
+	  public boolean insertItem(String item, String price, String seller, String description) throws SQLException {
 	    	
 		  	connect_func();  
 	    	
-			String sql = "insert into Items(title, price, description) values (?, ?, ?)";
+			String sql = "insert into Items(title, price, SellerUsername, description) values (?, ?, ?, ?)";
 			preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 			preparedStatement.setString(1, item);
 			preparedStatement.setString(2, price);
-			preparedStatement.setString(3, description);
+			preparedStatement.setString(3, seller);
+			preparedStatement.setString(4, description);
+
 			
 			boolean rowInserted = false;
 			
@@ -505,12 +507,15 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		// class that holds data for this type of search
 		
 		List<String> usernameList = new ArrayList<>();
+		List<String> emailList = new ArrayList<>();
 		
 		while(resultSet.next()) {
 			usernameList.add(resultSet.getString("UserID"));
+			emailList.add(resultSet.getString("Email"));
 		    	}
 		       
 	    users.setUsername(usernameList);
+	    users.setEmail(emailList);
 	    
 	    statement.close();
 				}
@@ -526,13 +531,68 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 //========================================================
   // Search for user
 //========================================================
- public Boolean searchUsers(String username) throws SQLException{
+ public Boolean searchForUsername(String username) throws SQLException{
 	 
 	 UserClass allUsers = getUsers();
 	 List<String> userList = allUsers.getUsername();
 	 return userList.contains(username);
 	
  }
+
+//========================================================
+ // Search for user
+//========================================================
+public Boolean searchForEmail(String email) throws SQLException{
+	 
+	 UserClass allUsers = getUsers();
+	 List<String> emailList = allUsers.getEmail();
+	 return emailList.contains(email);
+	
+}
+
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+public ItemClass getCatXY(String X, String Y) throws SQLException{
+	  	connect_func();
+	  	ItemClass items = new ItemClass();
+				  
+	  	String sql0 = "select * from ItemsAndCategories I\r\n" + 
+	  			"where Category = ? AND SellerUsername IN(\r\n" + 
+	  			"SELECT SellerUsername \r\n" + 
+	  			"FROM ItemsAndCategories IC\r\n" + 
+	  			"WHERE Category = ? AND DATE(I.DatePosted) = DATE(IC.DatePosted)\r\n" + 
+	  			")";
+	  	preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  	preparedStatement.setString(1, X);
+		preparedStatement.setString(2, Y);
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = preparedStatement.executeQuery();
+				
+		// class that holds data for this type of search
+		
+		List<String> usernameList = new ArrayList<>();
+		
+		
+		while(resultSet.next()) {
+			usernameList.add(resultSet.getString("SellerUsername"));
+			
+		    	}
+		       
+	    items.setUsername(usernameList);
+	    
+	    
+	    preparedStatement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return items;
+
+}
 
 //========================================================
   // big function that just initializes all the necessary
@@ -549,13 +609,15 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		 	String sql123 = "DROP TABLE IF EXISTS FavoriteItems";
 		 	String sql1234 = "DROP TABLE IF EXISTS FavoriteSellers";
 		 		
-		 	String sql2 =	"CREATE TABLE Items(" + 
-		 			"Title varchar(50)," + 
-		 			"ID int NOT NULL AUTO_INCREMENT," + 
-		 			"Price DECIMAL(7,2)  NOT NULL," + 
-		 			"Description TEXT," + 
-		 			"DatePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP," + 
-		 			"Primary key(ID))";
+		 	String sql2 =	"create table Items(\r\n" + 
+		 			"title varchar(50) NOT NULL,\r\n" + 
+		 			"ID int NOT NULL AUTO_INCREMENT,\r\n" + 
+		 			"price DECIMAL(7,2)  NOT NULL,\r\n" + 
+		 			"SellerUsername varchar(40),\r\n" + 
+		 			"description TEXT,\r\n" + 
+		 			"datePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\r\n" + 
+		 			"primary key(ID),\r\n" + 
+		 			"FOREIGN KEY(SellerUsername) REFERENCES Users(UserID))";
 		 	
 		 	String sql3 = "CREATE TABLE ItemCategories(" + 
 		 			"ItemID int NOT NULL," + 
@@ -593,6 +655,12 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		 			"FOREIGN KEY (FavoriteSeller) REFERENCES Users(UserID),\r\n" + 
 		 			"PRIMARY KEY(Username, FavoriteSeller))";
 		 	
+		 	String sql7="DROP VIEW IF EXISTS ItemsAndCategories";
+		 	String sql8="create view ItemsAndCategories AS\r\n" + 
+		 			"SELECT I.ID, I.SellerUsername, I.title, C.Category, I.DatePosted\r\n" + 
+		 			"FROM Items I, ItemCategories C\r\n" + 
+		 			"WHERE I.ID = C.ItemID";
+		 	
 		 	// drop the tables then recreate them
 		 	try {
 		 	statement =  (Statement) connect.createStatement();
@@ -601,11 +669,14 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		 	statement.executeUpdate(sql0);
 		 	statement.executeUpdate(sql1);
 		 	statement.executeUpdate(sql12);
+		 	
+		 	statement.executeUpdate(sql4);
 		 	statement.executeUpdate(sql2);
 		 	statement.executeUpdate(sql3);
-		 	statement.executeUpdate(sql4);
 		 	statement.executeUpdate(sql5);
 		 	statement.executeUpdate(sql6);
+		 	statement.executeUpdate(sql7);
+		 	statement.executeUpdate(sql8);
 		 	}
 		 	catch(Exception e) {
 		 		System.out.println("Initialize failed: " + e);
@@ -613,18 +684,26 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		 	
 		 	System.out.println("tables created.");
 		 	
-		 	// initialize items table
 		 	DbFunctions test = new DbFunctions();
-		 	test.insertItem("Banana", "12.50", "Yellow and Yummy");
-		 	test.insertItem("Dvd", "12.00", "Fast and Furious");
-		 	test.insertItem("Watermelon", "6.50", "Red and Yummy");
-		 	test.insertItem("Black socks", "2.50", "Black");
-		 	test.insertItem("Laptop", "120.50", "Silver");
-		 	test.insertItem("Trash bag", "1.50", "black");
-		 	test.insertItem("White tee", "5.50", "Plain white tee");
-		 	test.insertItem("Sunflower Seeds", "12.50", "For eating");
-		 	test.insertItem("iPhone", "1200.00", "Black");
-		 	test.insertItem("China Plates", "120.50", "Genuine ceramics");
+			// initialize user table
+		 	test.insertUser("root", "pass1234", "scott@gmail.com", "Scott", "Howard", "Male", "22", true);
+		 	test.insertUser("maclo4", "pass1234", "maclo4@gmail.com", "Scott", "Howard", "Male", "22", false);
+		 	test.insertUser("evan", "pass1234", "evan@gmail.com", "evan", "nguyen", "Male", "21", false);
+		 	test.insertUser("corey", "pass1234", "scott@gmail.com", "corey", "tessler", "Male", "28", false);
+		 	
+		 	
+		 	// initialize items table
+		
+		 	test.insertItem("Banana", "12.50", "maclo4", "Yellow and Yummy");
+		 	test.insertItem("Dvd", "12.00", "maclo4", "Fast and Furious");
+		 	test.insertItem("Watermelon", "6.50","maclo4", "Red and Yummy");
+		 	test.insertItem("Black socks", "2.50", "evan","Black");
+		 	test.insertItem("Laptop", "120.50", "evan","Silver");
+		 	test.insertItem("Trash bag", "1.50", "evan","b1lack");
+		 	test.insertItem("White tee", "5.50", "root","Plain white tee");
+		 	test.insertItem("Sunflower Seeds", "12.50","root", "For eating");
+		 	test.insertItem("iPhone", "1200.00", "root","Black");
+		 	test.insertItem("China Plates", "120.50", "root","Genuine ceramics");
 		 	
 		 	// initialize categories for items
 		 	test.insertCategory("Banana", "fruit");
@@ -639,13 +718,7 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 		 	test.insertCategory("iPhone", "technology");
 		 	test.insertCategory("China Plates", "home");
 		 	
-		 	// initialize user table
-		 	test.insertUser("root", "pass1234", "scott@gmail.com", "Scott", "Howard", "Male", "22", true);
-		 	test.insertUser("maclo4", "pass1234", "maclo4@gmail.com", "Scott", "Howard", "Male", "22", false);
-		 	test.insertUser("evan", "pass1234", "evan@gmail.com", "evan", "nguyen", "Male", "21", false);
-		 	test.insertUser("corey", "pass1234", "scott@gmail.com", "corey", "tessler", "Male", "28", false);
-		 	
-		 	
+		 
 	        return true;
 			
 	  }

@@ -15,6 +15,7 @@
 <br>
 
 
+
 <!-- forms to add an item to the database  -->
  <form action="controller.jsp" method="POST" >
   <h4>Insert Item into Database: </h4>
@@ -211,6 +212,11 @@ PrintWriter output = response.getWriter();
   <input type="submit" value="Delete"></form>
   
   <br>
+  <br>
+  <form action = "page2.jsp" method = "GET">
+	<input type="submit" value="Next Page" name = "Next Page">
+</form>
+<br> <br>
     <br>
  
   

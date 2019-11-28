@@ -99,7 +99,7 @@ switch(htmlFormName) {
 	  
 	 
 	  // call functions to add to database
-	  test.insertItem(ItemName, Price, Description);
+	  test.insertItem(ItemName, Price, sessionUser, Description);
 	  test.insertCategory(ItemName, Category);
 	  
 	 // test.insertCategory("iPhone", "more trash 2.0");
@@ -258,8 +258,10 @@ switch(htmlFormName) {
 	  String age = request.getParameter("Age");
 	  
 	  Boolean validateEmail = validEmail(email);
+	  Boolean emailExists = test.searchForEmail(email);
+	  Boolean usernameExists = test.searchForUsername(newUsername);
 	  
-	  if(!test.searchUsers(newUsername) && newPassword.equals(verifyPassword) && validateEmail){
+	  if(!usernameExists && !emailExists && newPassword.equals(verifyPassword) && validateEmail){
 		  output.println("new user validated");
 	 		test.insertUser(newUsername,newPassword, email,
 	 				  firstName, lastName, gender, age, false);
@@ -278,6 +280,25 @@ switch(htmlFormName) {
 	  
 	  
  		
+	  break;
+
+// ========================================================
+// Get users who posted items in category X and Y
+// ========================================================
+  case "GetCategoryXY":
+	  
+	  ItemClass result;
+	  String X = request.getParameter("CategoryX");
+	  String Y = request.getParameter("CategoryY");
+	  result = test.getCatXY(X, Y);
+	  List<String> userList = result.getUsername();
+	  session.setAttribute("CatXY", userList);
+	  output.println("<h3>Users who posted items with category "+ X + " and " + Y + " on the same day</h3>");
+	  int size = userList.size();
+	  
+	  for(int i =0; i<size; i++){
+	  output.println(i+1 + ": "+ userList.get(i) + "<br>");}
+	  
 	  break;
 // ========================================================
 // DEFAULT CASE

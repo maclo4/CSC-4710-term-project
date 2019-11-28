@@ -20,7 +20,7 @@
 		<meta charset="utf-8">
 	</head>
 
-<h1>Test</h1><br><br>
+<h1>Login</h1><br><br>
 
 <form action = "controller.jsp" method = "GET">
 	<input type="submit" value="Initialize" name = "initialize">
