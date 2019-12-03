@@ -218,7 +218,22 @@ switch(htmlFormName) {
 // ADD REVIEW
 // ========================================================
   case "AddReview":
- 		
+	  /*
+	  output = response.getWriter();
+	  output.println("Form submitted: " + htmlFormName);
+	  
+	  String reviewer = request.getParameter("ReveiwerId");
+	  String item = request.getParameter("ItemId");
+	  String review = request.getParameter("reviewdescription");
+
+	  System.out.println("Item to review: "+ item);
+	  System.out.println("Please write a review: "+ review);
+	  reviewer = request.getUserPrincipal("");
+ 		test.addReview(reviewer, item, review);
+ 	// redirect back
+ 		redirectURL = "home.jsp";
+ 		response.sendRedirect(redirectURL);
+ 	*/
 	  break;
 
 	
@@ -338,6 +353,8 @@ switch(htmlFormName) {
 	  output.println(i+1 + ": "+ sellerList.get(i) + "<br>");}
 	  
 	  break;
+
+	  
 // ========================================================
 // DEFAULT CASE
 // ========================================================

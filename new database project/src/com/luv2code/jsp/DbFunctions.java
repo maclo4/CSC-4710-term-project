@@ -700,6 +700,34 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		return Items;
 		  }
 
+  
+//========================================================
+// ADD REVIEW INTO DATABASE
+//========================================================
+  public boolean addReview(String reviewer, String item, String review) throws SQLException {
+    	/*
+	  	connect_func();  
+    	String sql = "insert into Reviews(ReviewerId, itemId, reviewdescription) values (?, ?, ?)";
+		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+		preparedStatement.setString(1, reviewer);
+		preparedStatement.setString(2, item);
+		preparedStatement.setString(3, review);
+		*/
+		boolean rowInserted = false;
+		/*
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+		 rowInserted = preparedStatement.executeUpdate() > 0;
+	        preparedStatement.close();}
+		catch(Exception e){
+			System.out.println(e);}
+		*/
+//		        disconnect();
+		        return rowInserted;
+		    }     
+	  
+  
+  
 //========================================================
   // big function that just initializes all the necessary
   // tables using other insert functions
@@ -714,6 +742,7 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		 	String sql12 = "DROP TABLE IF EXISTS Users";
 		 	String sql123 = "DROP TABLE IF EXISTS FavoriteItems";
 		 	String sql1234 = "DROP TABLE IF EXISTS FavoriteSellers";
+		 	String sql12345 = "DROP TABLE IF EXISTS Reviews";
 		 		
 		 	String sql2 =	"create table Items(\r\n" + 
 		 			"title varchar(50) NOT NULL,\r\n" + 
@@ -767,11 +796,21 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		 			"FROM Items I, ItemCategories C\r\n" + 
 		 			"WHERE I.ID = C.ItemID";
 		 	
+		 	String sql9 = "CREATE TABLE Reviews(" + 
+		 			"ReviewerId int NOT NULL," + 
+		 			"ItemId int NOT NULL," + 
+		 			"reviewdescription varchar(30)," +
+		 			"PRIMARY KEY(UserId, ItemId)," + 
+		 			"FOREIGN KEY (ReviewerId) REFERENCES Users(UserID)," + 
+		 			"FOREIGN KEY (ItemId) REFERENCES Items(ID)" + 
+		 			"ON DELETE CASCADE ON UPDATE CASCADE)";
+		 	
 		 	// drop the tables then recreate them
 		 	try {
 		 	statement =  (Statement) connect.createStatement();
 		 	statement.executeUpdate(sql123);
 		 	statement.executeUpdate(sql1234);
+		 	statement.executeUpdate(sql12345);
 		 	statement.executeUpdate(sql0);
 		 	statement.executeUpdate(sql1);
 		 	statement.executeUpdate(sql12);
@@ -783,6 +822,8 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		 	statement.executeUpdate(sql6);
 		 	statement.executeUpdate(sql7);
 		 	statement.executeUpdate(sql8);
+		 	statement.executeUpdate(sql9);
+
 		 	}
 		 	catch(Exception e) {
 		 		System.out.println("Initialize failed: " + e);
