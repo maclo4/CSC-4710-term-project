@@ -705,23 +705,23 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 // ADD REVIEW INTO DATABASE
 //========================================================
   public boolean addReview(String reviewer, String item, String review) throws SQLException {
-    	/*
+    	
 	  	connect_func();  
     	String sql = "insert into Reviews(ReviewerId, itemId, reviewdescription) values (?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, reviewer);
 		preparedStatement.setString(2, item);
 		preparedStatement.setString(3, review);
-		*/
+		
 		boolean rowInserted = false;
-		/*
+		
 		// try blocks so that the system doesn't crash when sql statements are rejected
 		try {
 		 rowInserted = preparedStatement.executeUpdate() > 0;
 	        preparedStatement.close();}
 		catch(Exception e){
 			System.out.println(e);}
-		*/
+		
 //		        disconnect();
 		        return rowInserted;
 		    }     
@@ -796,11 +796,12 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		 			"FROM Items I, ItemCategories C\r\n" + 
 		 			"WHERE I.ID = C.ItemID";
 		 	
-		 	String sql9 = "CREATE TABLE Reviews(" + 
-		 			"ReviewerId int NOT NULL," + 
+		 	String sql9 = "CREATE TABLE Reviews("
+		 			+ "ReviewNumber int NOT NULL AUTO_INCREMENT," + 
+		 			"ReviewerId varchar(50) NOT NULL," + 
 		 			"ItemId int NOT NULL," + 
 		 			"reviewdescription varchar(30)," +
-		 			"PRIMARY KEY(UserId, ItemId)," + 
+		 			"PRIMARY KEY(ReviewNumber)," + 
 		 			"FOREIGN KEY (ReviewerId) REFERENCES Users(UserID)," + 
 		 			"FOREIGN KEY (ItemId) REFERENCES Items(ID)" + 
 		 			"ON DELETE CASCADE ON UPDATE CASCADE)";

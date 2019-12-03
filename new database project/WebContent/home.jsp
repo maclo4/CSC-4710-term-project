@@ -16,7 +16,7 @@
 
 
 
-<!-- forms to add an item to the database  -->
+<!-- ===================== forms to add an item to the database =================== -->
  <form action="controller.jsp" method="POST" >
   <h4>Insert Item into Database: </h4>
   <input type="text" name="ItemName"><br>
@@ -39,23 +39,17 @@
 <br>
 <hr><br>
 
-<!-- CATEGORY SEARCH -->
+<!-- ======================= CATEGORY SEARCH ====================== -->
 <form action="controller.jsp" method="POST" >
   <h4>Search Items By Category </h4><br>
   <input type="text" name="SearchCategory"><br>
   <input type = "hidden" name ="FormName" value ="CategorySearch" >
   <input type="submit" value="submit"></form>
 
-<!-- ADD REVIEW -->
-<form action="controller.jsp" method="POST" >
-  <h4>Add Review By Item</h4><br>
-  <input type="text" name="AddReview"><br>
-  <input type = "hidden" name ="FormName" value ="AddReview">
-  <input type="submit" value="submit"></form>
 
 
 <hr>
-<!-- LIST MOST EXPENSIVE -->
+<!-- ====================== LIST MOST EXPENSIVE =================== -->
 <form action="controller.jsp" method="POST" > <br>
 <h4>List Most Expensive Item in Each Category</h4>
   <input type = "hidden" name ="FormName" value ="Expensive" >
@@ -66,24 +60,59 @@
 <br>
 
 <% 
+// =====================================================================================
+// =====================================================================================
 // declare instances of the other classes in the package
-// DbFunctions has all the important functions
-// ItemClass stores information about the query
-// listTitles stores the names of the 
-DbFunctions dbFunctions = new DbFunctions();
-ItemClass itemSet = new ItemClass();
-itemSet = dbFunctions.SearchItems();
-List<String> listTitles = new ArrayList<>(itemSet.getTitle());
-PrintWriter output = response.getWriter();
-%>
 
-   <%
-   	ItemClass favoriteItemSet = new ItemClass();
-          String user = String.valueOf(session.getAttribute("Username"));
-          favoriteItemSet = dbFunctions.getFavoriteItems(user);
-          List<String> listFavorites = new ArrayList<>(favoriteItemSet.getTitle());
-          List<String> listFavoriteID = new ArrayList<>(favoriteItemSet.getID());
+
+DbFunctions dbFunctions = new DbFunctions(); // DbFunctions has all the important functions
+ItemClass itemSet = new ItemClass(); // ItemClass stores information about the query
+itemSet = dbFunctions.SearchItems(); // get all items in database
+List<String> listTitles = new ArrayList<>(itemSet.getTitle()); // listTitles stores the names of the items
+List<String> listItemIDs = new ArrayList<>(itemSet.getID());  // get all item ID's
+PrintWriter output = response.getWriter();
+String user = String.valueOf(session.getAttribute("Username")); // this is the current user
+
+
+
+// =============================================================================
+//    <!-- =============== ADD REVIEW ===================================== -->
+// ==============================================================================
+ItemClass favoriteItemSet = new ItemClass();
+
+ favoriteItemSet = dbFunctions.getFavoriteItems(user);
+ List<String> listFavorites = new ArrayList<>(favoriteItemSet.getTitle());
+ List<String> listFavoriteID = new ArrayList<>(favoriteItemSet.getID());
    %>
+    
+ 
+<form action="controller.jsp" method="POST" >
+  <h4>Add Review By Item</h4><br>
+  <select name = "ReviewItem">
+        <%
+        	for(int i =0; i < listTitles.size(); i++){
+        %>
+            <option value = "<%=listItemIDs.get(i)%>">
+            <%=listTitles.get(i)%></option>
+        <%
+        	}
+        %>
+  </select>
+  <br>
+  <textarea name="ReviewDescription" rows = "8" cols = "70"></textarea><br>
+  <input type = "hidden" name ="FormName" value ="AddReview">
+   Rating:
+  <select name = "ReviewRating">
+  		<option value = "Excellent">Excellent</option>
+  		<option value = "Good">Good</option>
+  		<option value = "Fair">Fair</option>
+  		<option value = "Poor">Poor</option>
+  </select>
+  <input type="submit" value="submit"></form>
+    
+    
+    
+    
     
     <!-- Display table of favorite items -->
     <h4>Favorite Items for current user</h4>
@@ -106,6 +135,9 @@ PrintWriter output = response.getWriter();
    %>
  
 </table>
+
+
+
 <!-- ADD FAVORITE ITEM -->
 <form action="controller.jsp" method="POST" > <br>
  <h4> Add Items to Favorite List </h4>

@@ -218,22 +218,22 @@ switch(htmlFormName) {
 // ADD REVIEW
 // ========================================================
   case "AddReview":
-	  /*
+	  
 	  output = response.getWriter();
 	  output.println("Form submitted: " + htmlFormName);
 	  
-	  String reviewer = request.getParameter("ReveiwerId");
-	  String item = request.getParameter("ItemId");
-	  String review = request.getParameter("reviewdescription");
+	  String reviewer = sessionUser;
+	  String reviewItem = request.getParameter("ReviewItem");
+	  String review = request.getParameter("ReviewDescription");
+	  String rating = request.getParameter("ReviewRating");
 
-	  System.out.println("Item to review: "+ item);
-	  System.out.println("Please write a review: "+ review);
-	  reviewer = request.getUserPrincipal("");
- 		test.addReview(reviewer, item, review);
+	
+	 
+ 		test.addReview(reviewer, reviewItem, review);
  	// redirect back
  		redirectURL = "home.jsp";
  		response.sendRedirect(redirectURL);
- 	*/
+ 	
 	  break;
 
 	
