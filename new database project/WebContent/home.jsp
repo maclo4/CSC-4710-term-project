@@ -46,6 +46,13 @@
   <input type = "hidden" name ="FormName" value ="CategorySearch" >
   <input type="submit" value="submit"></form>
 
+<!-- ADD REVIEW -->
+<form action="controller.jsp" method="POST" >
+  <h4>Add Review By Item</h4><br>
+  <input type="text" name="AddReview"><br>
+  <input type = "hidden" name ="FormName" value ="AddReview">
+  <input type="submit" value="submit"></form>
+
 
 <hr>
 <!-- LIST MOST EXPENSIVE -->
