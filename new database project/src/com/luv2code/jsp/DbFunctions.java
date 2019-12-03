@@ -594,6 +594,112 @@ public ItemClass getCatXY(String X, String Y) throws SQLException{
 
 }
 
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws SQLException{
+	  	connect_func();
+	  	UserClass users = new UserClass();
+				  
+	  	String sql0 = "select FavoriteSeller from FavoriteSellers WHERE Username = ? AND \r\n" + 
+	  			"FavoriteSeller IN(\r\n" + 
+	  			"	SELECT FavoriteSeller\r\n" + 
+	  			"    FROM FavoriteSellers\r\n" + 
+	  			"    WHERE Username = ?)";
+	  	preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  	preparedStatement.setString(1, userOne);
+		preparedStatement.setString(2, userTwo);
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = preparedStatement.executeQuery();
+				
+		// class that holds data for this type of search
+		
+		List<String> mutualSellers = new ArrayList<>();
+		
+		
+		while(resultSet.next()) {
+			mutualSellers.add(resultSet.getString("FavoriteSeller"));
+			
+		    	}
+		       
+	    users.setUsername(mutualSellers);
+	    
+	    
+	    preparedStatement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return users;
+
+}
+
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+  public UserClass FindMaxItems() throws SQLException{
+	  connect_func();
+	  UserClass Items = new UserClass();
+	  int maxItems;
+	  
+	  // first, get the max number of posts by a user
+	  String sql0 = "SELECT MAX(itemCount) \r\n" + 
+	  		"FROM (\r\n" + 
+	  		"SELECT COUNT(title) itemCount\r\n" + 
+	  		"FROM Items I\r\n" + 
+	  		"GROUP BY SellerUsername) AS MostSold;";
+	  
+	  // then, use that number to search for users who have posted that number of times
+	  String sql1 = "Select SellerUsername\r\n" + 
+	  		"FROM Items\r\n" + 
+	  		"group by SellerUsername having count(SellerUsername) = ?";
+	  
+	  statement =  (Statement) connect.createStatement();
+	  
+	  
+	  //Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			// find max items posted
+			resultSet = statement.executeQuery(sql0);
+			
+			// max number of items posted
+			resultSet.next();
+			maxItems = resultSet.getInt("MAX(ItemCount)");
+			
+			// now use the max number of items in the preparedStatement
+			// find the users who have posted that amount of times
+			preparedStatement = (PreparedStatement) connect.prepareStatement(sql1);
+			preparedStatement.setInt(1, maxItems);
+			resultSet = preparedStatement.executeQuery();
+			
+
+	        List<String> sellerList = new ArrayList<>();
+	        
+	        while(resultSet.next()) {
+	        	
+	        	sellerList.add(resultSet.getString("SellerUsername"));
+	        	}
+		       
+	       
+	        Items.setUsername(sellerList);
+	      
+	       
+	        statement.close();
+	        preparedStatement.close();
+		 
+			  
+		}catch(Exception e) {
+			System.out.println(e);}
+		
+		        
+		return Items;
+		  }
+
 //========================================================
   // big function that just initializes all the necessary
   // tables using other insert functions

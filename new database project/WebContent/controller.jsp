@@ -300,6 +300,44 @@ switch(htmlFormName) {
 	  output.println(i+1 + ": "+ userList.get(i) + "<br>");}
 	  
 	  break;
+	  
+// ========================================================
+// Find mutual favorite sellers
+// ========================================================
+  case "FindMutualSellers":
+	  
+	String userOne = request.getParameter("BuyerOne");
+	String userTwo = request.getParameter("BuyerTwo");
+	
+	UserClass users = new UserClass();
+	users = test.getMutualFavoriteSellers(userOne, userTwo);
+	List<String> mutualSellers = users.getUsername();
+	
+	 output.println("<h3>Mutually favorited sellers from "+ userOne + " and " + userTwo + "<h3>");
+	  size = mutualSellers.size();
+	  
+	  for(int i =0; i<size; i++){
+	  output.println(i+1 + ": "+ mutualSellers.get(i) + "<br>");}
+	  
+	  break;
+// ========================================================
+// Find mutual favorite sellers
+// ========================================================
+  case "FindSellerWithMostItems":
+	  
+	  UserClass maxSellers = new UserClass();
+	  
+	  maxSellers = test.FindMaxItems();
+	  
+	  List<String> sellerList = maxSellers.getUsername();
+	  
+	  output.println("<h3> User(s) with the most items <h3>");
+	  size = sellerList.size();
+	  
+	  for(int i =0; i<size; i++){
+	  output.println(i+1 + ": "+ sellerList.get(i) + "<br>");}
+	  
+	  break;
 // ========================================================
 // DEFAULT CASE
 // ========================================================

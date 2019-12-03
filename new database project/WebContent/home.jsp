@@ -151,7 +151,7 @@ PrintWriter output = response.getWriter();
         List<String> listFavoriteSellers = new ArrayList<>(favoriteSellerSet.getUsername());
         
   %>
-     <!-- Display table of favorite items -->
+     <!-- Display table of favorite sellers -->
     <h4>Favorite Sellers for current user</h4>
     
     <style> table, th, td {
