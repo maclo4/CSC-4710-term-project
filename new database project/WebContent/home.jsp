@@ -78,11 +78,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
 // =============================================================================
 //    <!-- =============== ADD REVIEW ===================================== -->
 // ==============================================================================
-ItemClass favoriteItemSet = new ItemClass();
 
- favoriteItemSet = dbFunctions.getFavoriteItems(user);
- List<String> listFavorites = new ArrayList<>(favoriteItemSet.getTitle());
- List<String> listFavoriteID = new ArrayList<>(favoriteItemSet.getID());
    %>
     
  
@@ -111,7 +107,15 @@ ItemClass favoriteItemSet = new ItemClass();
   <input type="submit" value="submit"></form>
     
     
-    
+   <%
+   // ============================================================================
+   // favorite item variables
+   // ============================================================================
+   ItemClass favoriteItemSet = new ItemClass(); 
+ favoriteItemSet = dbFunctions.getFavoriteItems(user);  // holds all items favorited by current user
+ List<String> listFavorites = new ArrayList<>(favoriteItemSet.getTitle()); // holds the titles of all the fav items
+ List<String> listFavoriteID = new ArrayList<>(favoriteItemSet.getID())  // holds the ID (number) of all the fav items
+ %> 
     
     
     <!-- Display table of favorite items -->
