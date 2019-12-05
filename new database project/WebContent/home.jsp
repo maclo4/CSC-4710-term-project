@@ -81,6 +81,45 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
 
    %>
     
+     <%
+  		ReviewClass userReviews = new ReviewClass();
+        user = String.valueOf(session.getAttribute("Username"));
+        userReviews = dbFunctions.getUserReviews(user);
+        List<String> listUserReviews = new ArrayList<>(userReviews.getRating());
+        List<String> listUserReviewItems = new ArrayList<>(userReviews.getTitle());
+        
+  %>
+     <!-- Display table of favorite sellers -->
+     <hr>
+   
+   <h2 align="center">Reviews by <%=user %></h2>
+    
+    <style> table, th, td {
+  border: 1px solid black;
+ 
+}</style>
+    <table style="width:10%" align = "center">
+    <tr>
+    <th> </th>
+    <th>Item </th>
+    <th>Rating </th>
+    </tr>
+    <%
+    	for(int i =0; i < listUserReviews.size(); i++){
+    %>
+  <tr>
+  <th> <%=i+1%>: </th>
+   
+    <th> <%=listUserReviewItems.get(i) %></th>
+    <th><%=listUserReviews.get(i)%></th>
+    
+  </tr>
+   <%
+   	}
+   %>
+   </table>
+ 
+   
  
 <form action="controller.jsp" method="POST" >
   <h4>Add Review By Item</h4><br>
@@ -119,6 +158,8 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
  %> 
     
     
+    <hr>
+ 
     <!-- Display table of favorite items -->
     <h4>Favorite Items for current user</h4>
     

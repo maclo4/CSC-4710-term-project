@@ -69,6 +69,48 @@
 	<input type="hidden" name = "FormName" value="FindSellerWithMostItems">
 	<input type = "submit" value="Search">
 </form>
+<br><br>
+
+<%
+  		ReviewClass userReviews = new ReviewClass();
+        String user = String.valueOf(session.getAttribute("Username"));
+        userReviews = dbFunctions.getGoodReviews(user);
+        List<String> listUserReviews = new ArrayList<>(userReviews.getRating());
+        List<String> listUserReviewItems = new ArrayList<>(userReviews.getTitle());
+        
+  %>
+     <!-- Display table of favorite sellers -->
+     <hr>
+   
+   <h2 align="center">Reviews by <%=user %></h2>
+    
+    <style> table, th, td {
+  border: 1px solid black;
+ 
+}</style>
+    <table style="width:10%" align = "center">
+    <tr>
+    <th> </th>
+    <th>Item </th>
+    <th>Rating </th>
+    </tr>
+    <%
+    	for(int i =0; i < listUserReviews.size(); i++){
+    %>
+  <tr>
+  <th> <%=i+1%>: </th>
+   
+    <th> <%=listUserReviewItems.get(i) %></th>
+    <th><%=listUserReviews.get(i)%></th>
+    
+  </tr>
+   <%
+   	}
+   %>
+   </table>
+ 
+
+<br><br>
 
 <form action = "home.jsp" method = "GET">
 	<input type="submit" value="Home Page" name = "Home Page">

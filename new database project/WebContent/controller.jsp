@@ -233,7 +233,7 @@ switch(htmlFormName) {
  		test.addReview(reviewer, reviewItem, review, rating);
  	// redirect back
  		redirectURL = "home.jsp";
- 		//response.sendRedirect(redirectURL);
+ 		response.sendRedirect(redirectURL);
  	
 	  break;
 
