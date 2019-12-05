@@ -148,6 +148,29 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
     
     
    <%
+   
+%>
+   <!-- ================	List No Poor Reviews	================-->
+
+	<form action="controller.jsp" method="POST" > <br>
+	<h4>List Users Who Posted No Poor Reviews</h4>
+	<input type = "hidden" name ="FormName" value="NoPoor" >
+	<input type="submit" value="List Users">
+	</form>
+
+<%
+
+%>
+<!-- ================	List No Excellent Users	================-->
+
+	<form action="controller.jsp" method="POST" > <br>
+	<h4>List Users Who's Items Have No Excellent Reviews</h4>
+	<input type = "hidden" name ="FormName" value="NoExcellent" >
+	<input type="submit" value="List Users">
+	</form>
+
+<%
+
    // ============================================================================
    // favorite item variables
    // ============================================================================

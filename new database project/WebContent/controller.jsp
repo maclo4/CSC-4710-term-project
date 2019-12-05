@@ -230,14 +230,51 @@ switch(htmlFormName) {
 	  output.println("review rating: " + rating);
 	
 	 
- 		test.addReview(reviewer, reviewItem, review, rating);
+		test.addReview(reviewer, reviewItem, review, rating);
  	// redirect back
  		redirectURL = "home.jsp";
  		response.sendRedirect(redirectURL);
  	
 	  break;
 
-	
+
+// ========================================================
+// LIST NO POOR REVEIWS
+// ========================================================
+  case "ListNoPoor":	 
+	  
+	  ReviewClass reviewuser1 = new ReviewClass();
+	  reviewuser1 = test.listNoPoorReviews();
+		
+		List<String> listReviewers = new ArrayList<>(reviewuser1.getUsername());
+		
+		System.out.println("outside listNoPoor for loop");
+		for (int i=0; i < listReviewers.size(); i++){
+			System.out.println("inside listNoPoor for loop");
+			out.println("Item Name:  " +listReviewers.get(i) + "<br>");}
+			
+		break;
+			
+
+// ========================================================
+// LIST USERS WITH ITEMS THAT HAVE NO EXCELLENT REVIEWS
+// ========================================================
+  case "ListNoExcellent":	 
+	  
+	  ReviewClass reviewuser2 = new ReviewClass();
+	  reviewuser2 = test.listNoPoorReviews();
+		
+		
+		List<String> listUsers = new ArrayList<>(reviewuser2.getUsername());
+		
+		System.out.println("outside listNoExcellent for loop");
+		for (int i=0; i < listUsers.size(); i++){
+			System.out.println("inside listNoExcellent for loop");
+			out.println("User Name:  " +listUsers.get(i) + "<br>");}
+			
+		break;
+			
+ 
 // ========================================================
 // ADD FAVORITE ITEM
 // ========================================================
@@ -355,6 +392,8 @@ switch(htmlFormName) {
 	  
 	  break;
 
+	  
+	  
 	  
 // ========================================================
 // DEFAULT CASE

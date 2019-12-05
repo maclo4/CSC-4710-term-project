@@ -853,6 +853,61 @@ public ReviewClass getGoodReviews(String reviewer) throws SQLException{
 		return reviews;
 
 }
+
+ 
+//=======================================================
+//DISPLAY NEVER POSTED POOR
+//======================================================== 	
+ public ReviewClass listNoPoorReviews() throws SQLException{
+	  	connect_func();
+	  	ReviewClass reviews = new ReviewClass();
+	  	String sql0 = "SELECT UserID" +
+	  				  "FROM Users"+
+	  				  "WHERE UserID IN"+
+	  				  "(SELECT ReviewerId" +
+	  				  "FROM Reviews"+
+	  				  "WHERE Rating != 'Poor')";
+	  				  
+	  	try {
+	  	statement = (Statement) connect.createStatement();
+	  	statement.executeUpdate(sql0);
+	  	}
+	  	
+	  	catch(Exception e) {
+	  		System.out.println(e);	
+	  	}
+	 return reviews;
+	 
+ }
+ 
+//=======================================================
+//DISPLAY USERS WHOS ITEMS HAVE NO EXCELLENT REVIEWS
+//======================================================== 	
+	 
+public ReviewClass listNoExcellent() throws SQLException{
+	connect_func();
+	ReviewClass review = new ReviewClass();
+	String sql0 = "SELECT UserID\r\n" + 
+				 "FROM Users\r\n" + 
+				 "WHERE UserID NOT IN(\r\n" + 
+				 "select SellerUsername from Items I\r\n" + 
+				 "where 3 <= (\r\n" + 
+				 "	select COUNT(Rating = \"Excellent\")\r\n" + 
+				 "    from Reviews\r\n" + 
+				 "    where ItemId = I.ID\r\n" + 
+				 "    group by ItemId)\r\n" + 
+				 "	)";
+	try {
+	  	statement = (Statement) connect.createStatement();
+	  	statement.executeUpdate(sql0);
+	  	}
+	  	
+	  	catch(Exception e) {
+	  		System.out.println(e);	
+	  	}
+	return review;
+}
+	 
 //========================================================
   // big function that just initializes all the necessary
   // tables using other insert functions
