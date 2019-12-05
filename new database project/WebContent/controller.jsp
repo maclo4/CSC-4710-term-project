@@ -226,13 +226,14 @@ switch(htmlFormName) {
 	  String reviewItem = request.getParameter("ReviewItem");
 	  String review = request.getParameter("ReviewDescription");
 	  String rating = request.getParameter("ReviewRating");
-
+	
+	  output.println("review rating: " + rating);
 	
 	 
- 		test.addReview(reviewer, reviewItem, review);
+ 		test.addReview(reviewer, reviewItem, review, rating);
  	// redirect back
  		redirectURL = "home.jsp";
- 		response.sendRedirect(redirectURL);
+ 		//response.sendRedirect(redirectURL);
  	
 	  break;
 

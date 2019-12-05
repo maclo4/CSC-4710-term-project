@@ -96,7 +96,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
   </select>
   <br>
   <textarea name="ReviewDescription" rows = "8" cols = "70"></textarea><br>
-  <input type = "hidden" name ="FormName" value ="AddReview">
+  
    Rating:
   <select name = "ReviewRating">
   		<option value = "Excellent">Excellent</option>
@@ -104,6 +104,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
   		<option value = "Fair">Fair</option>
   		<option value = "Poor">Poor</option>
   </select>
+  <input type = "hidden" name ="FormName" value ="AddReview">
   <input type="submit" value="submit"></form>
     
     
@@ -114,7 +115,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
    ItemClass favoriteItemSet = new ItemClass(); 
  favoriteItemSet = dbFunctions.getFavoriteItems(user);  // holds all items favorited by current user
  List<String> listFavorites = new ArrayList<>(favoriteItemSet.getTitle()); // holds the titles of all the fav items
- List<String> listFavoriteID = new ArrayList<>(favoriteItemSet.getID())  // holds the ID (number) of all the fav items
+ List<String> listFavoriteID = new ArrayList<>(favoriteItemSet.getID());  // holds the ID (number) of all the fav items
  %> 
     
     

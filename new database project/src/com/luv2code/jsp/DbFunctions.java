@@ -453,40 +453,75 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 // =======================================================
 // SEARCH FOR AN ITEM BASED ON THE CATEGORY
 //========================================================
-	  public ItemClass SearchItems() throws SQLException{
-		  connect_func();
-		  ItemClass Items = new ItemClass();
-			  
-		  String sql0 = "SELECT * FROM Items";
-		  statement =  (Statement) connect.createStatement();
-		  //Statement statement2 = (Statement) connect.createStatement();
-			  
+  public ItemClass SearchItems() throws SQLException{
+	  connect_func();
+	  ItemClass Items = new ItemClass();
+		  
+	  String sql0 = "SELECT * FROM Items";
+  statement =  (Statement) connect.createStatement();
+  //Statement statement2 = (Statement) connect.createStatement();
+	  
+	// try blocks so that the system doesn't crash when sql statements are rejected
+	try {
+		resultSet = statement.executeQuery(sql0);
+			
+        // class that holds data for this type of search
+        List<String> priceList = new ArrayList<>();
+        List<String> IDList = new ArrayList<>();
+        List<String> titleList = new ArrayList<>();
+        
+        while(resultSet.next()) {
+        	priceList.add(resultSet.getString("Price"));
+        	IDList.add(resultSet.getString("ID"));
+        	titleList.add(resultSet.getString("Title"));
+        	}
+	       
+        Items.setPrice(priceList);
+        Items.setTitle(titleList);
+        Items.setID(IDList);
+       
+        statement.close();
+			}
+	catch(Exception e) {
+		System.out.println(e);}
+	        
+	return Items;
+	  }
+
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+ public ItemClass SearchItemsByID(String ID) throws SQLException{
+	 connect_func();
+	  ItemClass Items = new ItemClass();
+	  
+	  String sql0 = "select title from Items where ID = ?";
+	  
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  preparedStatement.setString(1, ID);
+	  
 			// try blocks so that the system doesn't crash when sql statements are rejected
 			try {
-				resultSet = statement.executeQuery(sql0);
-					
-		        // class that holds data for this type of search
-		        List<String> priceList = new ArrayList<>();
-		        List<String> IDList = new ArrayList<>();
-		        List<String> titleList = new ArrayList<>();
-		        
-		        while(resultSet.next()) {
-		        	priceList.add(resultSet.getString("Price"));
-		        	IDList.add(resultSet.getString("ID"));
-		        	titleList.add(resultSet.getString("Title"));
-		        	}
-			       
-		        Items.setPrice(priceList);
-		        Items.setTitle(titleList);
-		        Items.setID(IDList);
-		       
-		        statement.close();
-					}
+			ResultSet resultSet2 = preparedStatement.executeQuery();
+			
+	        // class that holds data for this type of search
+	     
+	        List<String> TitleList = new ArrayList<>();
+	        while(resultSet2.next()) {
+	        	
+	        	TitleList.add(resultSet2.getString("title"));
+	        	
+	        }
+	       
+	        
+	        Items.setTitle(TitleList);
+	        preparedStatement.close();
+			}
 			catch(Exception e) {
 				System.out.println(e);}
-			        
+	        
 			return Items;
-			  }
+	  }
 
 
 // =======================================================
@@ -704,14 +739,17 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 //========================================================
 // ADD REVIEW INTO DATABASE
 //========================================================
-  public boolean addReview(String reviewer, String item, String review) throws SQLException {
+  public boolean addReview(String reviewer, String item, String review, String rating) throws SQLException {
     	
 	  	connect_func();  
-    	String sql = "insert into Reviews(ReviewerId, itemId, reviewdescription) values (?, ?, ?)";
+	  	
+	  	
+    	String sql = "insert into Reviews(ReviewerId, itemId, reviewdescription, Rating) values (?, ?, ?, ?)";
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, reviewer);
 		preparedStatement.setString(2, item);
 		preparedStatement.setString(3, review);
+		preparedStatement.setString(4, rating);
 		
 		boolean rowInserted = false;
 		
@@ -726,8 +764,43 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		        return rowInserted;
 		    }     
 	  
-  
-  
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//======================================================== 	
+ public UserClass getUserReviews(String reviewer) throws SQLException{
+	  	connect_func();
+	  	UserClass users = new UserClass();
+				  
+	  	String sql0 = "select * from Reviews where ReviewerID = ?";
+	  	preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  	preparedStatement.setString(1, reviewer);
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = statement.executeQuery(sql0);
+				
+		// class that holds data for this type of search
+		
+		List<String> itemList = new ArrayList<>();
+		List<String> reviewList = new ArrayList<>();
+		
+		while(resultSet.next()) {
+			itemList.add(resultSet.getString(""));
+			reviewList.add(resultSet.getString(""));
+		    	}
+		       
+	    //users.setUsername(usernameList);
+	    //users.setEmail(emailList);
+	    
+	    statement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return users;
+
+ }
 //========================================================
   // big function that just initializes all the necessary
   // tables using other insert functions
@@ -801,6 +874,8 @@ public UserClass getMutualFavoriteSellers(String userOne, String userTwo) throws
 		 			"ReviewerId varchar(50) NOT NULL," + 
 		 			"ItemId int NOT NULL," + 
 		 			"reviewdescription varchar(30)," +
+		 			"Rating varchar(50) NOT NULL," +
+		 			"ItemName varchar(20) NOT NULL" +
 		 			"PRIMARY KEY(ReviewNumber)," + 
 		 			"FOREIGN KEY (ReviewerId) REFERENCES Users(UserID)," + 
 		 			"FOREIGN KEY (ItemId) REFERENCES Items(ID)" + 
