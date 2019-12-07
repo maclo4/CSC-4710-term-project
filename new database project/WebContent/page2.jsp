@@ -124,7 +124,7 @@
 </table>
 
 
- <!-- ADD FAVORITE SELLER -->
+ <!-- DROP DOWN BOX TO DISPLAY ALL THE USERS FROM WHICH TO CHOOSE -->
 <form action="page2.jsp" method="POST" align="center" > <br>
  <h4> Choose a Seller </h4>
  
