@@ -230,14 +230,52 @@ switch(htmlFormName) {
 	  output.println("review rating: " + rating);
 	
 	 
- 		test.addReview(reviewer, reviewItem, review, rating);
+		test.addReview(reviewer, reviewItem, review, rating);
  	// redirect back
  		redirectURL = "home.jsp";
  		response.sendRedirect(redirectURL);
  	
 	  break;
 
-	
+
+// ========================================================
+// LIST NO POOR REVEIWS
+// ========================================================
+  case "ListNoPoor":	 
+	  
+	  UserClass niceUsers = new UserClass();
+	  niceUsers = test.listNoPoorReviews();
+		
+		List<String> listReviewers = new ArrayList<>(niceUsers.getUsername());
+		
+		System.out.println("outside listNoPoor for loop");
+		for (int i=0; i < listReviewers.size(); i++){
+			System.out.println("inside listNoPoor for loop");
+			out.println("Item Name:  " +listReviewers.get(i) + "<br>");}
+			
+		break;
+			
+
+// ========================================================
+// LIST USERS WITH ITEMS THAT HAVE NO EXCELLENT REVIEWS
+// ========================================================
+  case "ListNoExcellent":	 
+	  /*
+	  ReviewClass reviewuser2 = new ReviewClass();
+	  reviewuser2 = test.listNoPoorReviews();
+		
+		
+		List<String> listUsers = new ArrayList<>(reviewuser2.getUsername());
+		
+		System.out.println("outside listNoExcellent for loop");
+		for (int i=0; i < listUsers.size(); i++){
+			System.out.println("inside listNoExcellent for loop");
+			out.println("User Name:  " +listUsers.get(i) + "<br>");}
+			
+		*/
+		break;
+			
+ 
 // ========================================================
 // ADD FAVORITE ITEM
 // ========================================================
@@ -356,7 +394,102 @@ switch(htmlFormName) {
 	  break;
 
   case "GetUserReviews":
+	  	  
+	  break;
+
+  case "GetUserPairs": 
 	  
+	  // get the html super variables
+	  String user1 = request.getParameter("User1");
+	  String user2 = request.getParameter("User2");
+	  
+	  // these will all be necessary
+	  ItemClass user1Items = new ItemClass();
+	  ReviewClass user1Reviews = new ReviewClass();
+	  
+	  ItemClass user2Items = new ItemClass();
+	  ReviewClass user2Reviews = new ReviewClass();
+	
+	  // spend some lines just initializing all these arrays, then ill search thru each of them
+	  user1Items = test.getItemsByUser(user1);
+	  user1Reviews = test.getReviewsByUser(user1);
+	  
+	  user2Items = test.getItemsByUser(user2);
+	  user2Reviews = test.getReviewsByUser(user2);
+	  
+	  List<String> user1ItemIDs = user1Items.getID();
+	  List<String> user1ReviewIDs = user1Reviews.getID();
+	  List<String> user1Ratings = user1Reviews.getRating();	  
+	  
+	  List<String> user2ItemIDs = user2Items.getID();
+	  List<String> user2ReviewIDs = user2Reviews.getID();
+	  List<String> user2Ratings = user2Reviews.getRating();
+	  
+	  
+	  String ratingString;
+	  String IDString;
+	  Boolean flag = false;
+	  Boolean passed = true;
+
+	  for (int i = 0; i< user1ItemIDs.size(); i++){
+	  	
+
+	  	for(int j=0; j< user2ReviewIDs.size(); j++){
+	  		
+	  		IDString = user1ItemIDs.get(i);
+	  		
+	  		if(IDString.equals(user2ReviewIDs.get(j)))
+	  		{
+	  			ratingString = user2Ratings.get(j);
+	  			
+	  			if(ratingString.equals("Excellent")){
+	  				
+	  				flag = true;}
+	  		}
+	  	
+	  	}
+	  	if(flag == false){
+	  		output.println("<br>No excellent reviews from " + user2 + " for item with ID:" + user1ItemIDs.get(i));
+	  		passed = false;}
+	  	
+	  	flag = false;
+	 
+	  }
+	  
+	  Boolean flag2 = false;
+	  Boolean passed2 = true;
+
+	  for (int i = 0; i< user2ItemIDs.size(); i++){
+		  	
+		  
+	  	for(int j=0; j< user1ReviewIDs.size(); j++){
+	  		
+	  		IDString = user2ItemIDs.get(i);
+	  		
+	  		if(IDString.equals(user1ReviewIDs.get(j)))
+	  		{
+	  			ratingString = user1Ratings.get(j);
+	  			
+	  			if(ratingString.equals("Excellent")){
+	  				
+	  				flag2 = true;}
+	  		}
+	  	
+	  	}
+
+	  	if(flag2 == false)
+	  		{output.println("<br>No excellent reviews from " + user1 + " for item with ID:" + user2ItemIDs.get(i));
+	  		passed2 = false;}
+	  	
+	  	flag2 = false;
+	  	
+	  }
+	  
+	  
+	  if(passed == true && passed2 == true)
+		  output.println("<br>The test passed, each user has given excellent reviews to all of the items from the other user");
+	  else
+		  output.println("<br>Test was failed");
 	  
 	  break;
 // ========================================================

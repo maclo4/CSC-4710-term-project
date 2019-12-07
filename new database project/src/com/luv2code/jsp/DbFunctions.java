@@ -409,47 +409,47 @@ public boolean deleteFavSeller(String username, String favSeller) throws SQLExce
 	  }
 	  
 	  
-	// =======================================================
-	// SEARCH FOR AN ITEM BASED ON THE CATEGORY
-	//========================================================
-	  public ItemClass categorySearch(String category) throws SQLException{
-		  
-		  connect_func();
-		  ItemClass Items = new ItemClass();
-		  
-		  String sql0 = "SELECT * \r\n" + 
-		  		"FROM Items I\r\n" + 
-		  		"WHERE ID IN (\r\n" + 
-		  		"SELECT ItemID\r\n" + 
-		  		"FROM ItemCategories\r\n" + 
-		  		"WHERE Category = ?)";
-		  
-		  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
-		  preparedStatement.setString(1, category);
-		  
-				// try blocks so that the system doesn't crash when sql statements are rejected
-				try {
-				ResultSet resultSet2 = preparedStatement.executeQuery();
-				
-		        // class that holds data for this type of search
-		        List<String> PriceList = new ArrayList<>();
-		        List<String> TitleList = new ArrayList<>();
-		        while(resultSet2.next()) {
-		        	PriceList.add(resultSet2.getString("Price"));
-		        	TitleList.add(resultSet2.getString("title"));
-		        	
-		        }
-		       
-		        Items.setPrice(PriceList);
-		        Items.setTitle(TitleList);
-		        preparedStatement.close();
-				}
-				catch(Exception e) {
-					System.out.println(e);}
-		        
-				return Items;
-		  }
+// =======================================================
+// SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+  public ItemClass categorySearch(String category) throws SQLException{
 	  
+	  connect_func();
+	  ItemClass Items = new ItemClass();
+	  
+	  String sql0 = "SELECT * \r\n" + 
+	  		"FROM Items I\r\n" + 
+	  		"WHERE ID IN (\r\n" + 
+	  		"SELECT ItemID\r\n" + 
+	  		"FROM ItemCategories\r\n" + 
+	  		"WHERE Category = ?)";
+	  
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  preparedStatement.setString(1, category);
+	  
+			// try blocks so that the system doesn't crash when sql statements are rejected
+			try {
+			ResultSet resultSet2 = preparedStatement.executeQuery();
+			
+	        // class that holds data for this type of search
+	        List<String> PriceList = new ArrayList<>();
+	        List<String> TitleList = new ArrayList<>();
+	        while(resultSet2.next()) {
+	        	PriceList.add(resultSet2.getString("Price"));
+	        	TitleList.add(resultSet2.getString("title"));
+	        	
+	        }
+	       
+	        Items.setPrice(PriceList);
+	        Items.setTitle(TitleList);
+	        preparedStatement.close();
+			}
+			catch(Exception e) {
+				System.out.println(e);}
+	        
+			return Items;
+	  }
+  
 // =======================================================
 // SEARCH FOR AN ITEM BASED ON THE CATEGORY
 //========================================================
@@ -854,10 +854,11 @@ public ReviewClass getGoodReviews(String reviewer) throws SQLException{
 
 }
 
+
 //=======================================================
 // GET USERS WHO HAVE NEVER POSTED A POOR REVIEW
 //========================================================
-public UserClass getNoPoorReviews() throws SQLException{
+public UserClass listNoPoorReviews() throws SQLException{
 	  	connect_func();
 	  	UserClass users = new UserClass();
 				  
@@ -874,7 +875,7 @@ public UserClass getNoPoorReviews() throws SQLException{
 		// class that holds data for this type of search
 		
 		List<String> usernameList = new ArrayList<>();
-		List<String> emailList = new ArrayList<>();
+		
 		
 		while(resultSet.next()) {
 			usernameList.add(resultSet.getString("UserID"));
@@ -892,6 +893,136 @@ public UserClass getNoPoorReviews() throws SQLException{
 		return users;
 
 }
+
+ 
+ 
+//=======================================================
+//DISPLAY USERS WHOS ITEMS HAVE NO EXCELLENT REVIEWS
+//======================================================== 	
+	 
+//=======================================================
+//GET USERS WHO HAVE NEVER POSTED A POOR REVIEW
+//========================================================
+public UserClass listNoExcellentReviews() throws SQLException{
+	  	connect_func();
+	  	UserClass users = new UserClass();
+				  
+	  	String sql0 = "SELECT UserID\r\n" + 
+				 "FROM Users\r\n" + 
+				 "WHERE UserID NOT IN(\r\n" + 
+				 "select SellerUsername from Items I\r\n" + 
+				 "where 3 <= (\r\n" + 
+				 "	select COUNT(Rating = \"Excellent\")\r\n" + 
+				 "    from Reviews\r\n" + 
+				 "    where ItemId = I.ID\r\n" + 
+				 "    group by ItemId)\r\n" + 
+				 "	)";
+	  	statement =  (Statement) connect.createStatement();
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = statement.executeQuery(sql0);
+				
+		// class that holds data for this type of search
+		
+		List<String> usernameList = new ArrayList<>();
+		
+		
+		while(resultSet.next()) {
+			usernameList.add(resultSet.getString("UserID"));
+	
+		    	}
+		       
+	    users.setUsername(usernameList);
+	
+	    
+	    statement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return users;
+
+}
+
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+public ItemClass getItemsByUser(String user) throws SQLException{
+	  
+	  connect_func();
+	  ItemClass Items = new ItemClass();
+	  
+	  String sql0 = "select ID\r\n" + 
+	  		"from Items\r\n" + 
+	  		"where SellerUsername =?";
+	  
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  preparedStatement.setString(1, user);
+	  
+			// try blocks so that the system doesn't crash when sql statements are rejected
+			try {
+			ResultSet resultSet2 = preparedStatement.executeQuery();
+			
+	        // class that holds data for this type of search
+	        
+	        List<String> IDList = new ArrayList<>();
+	        while(resultSet2.next()) {
+	        	
+	        	IDList.add(resultSet2.getString("ID"));
+	        	
+	        }
+	       
+	      
+	        Items.setID(IDList);
+	        preparedStatement.close();
+			}
+			catch(Exception e) {
+				System.out.println(e);}
+	        
+			return Items;
+	  }
+
+//=======================================================
+//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//========================================================
+public ReviewClass getReviewsByUser(String user) throws SQLException{
+	  
+	  connect_func();
+	  ReviewClass reviews = new ReviewClass();
+	  
+	  String sql0 = "select *\r\n" + 
+	  		"from Reviews\r\n" + 
+	  		"where ReviewerID = ?" + 
+	  		"";
+	  
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  preparedStatement.setString(1, user);
+	  
+			// try blocks so that the system doesn't crash when sql statements are rejected
+			try {
+			ResultSet resultSet2 = preparedStatement.executeQuery();
+			
+	        // class that holds data for this type of search
+	        List<String> RatingList = new ArrayList<>();
+	        List<String> ReviewIDList = new ArrayList<>();
+	        while(resultSet2.next()) {
+	        	RatingList.add(resultSet2.getString("Rating"));
+	        	ReviewIDList.add(resultSet2.getString("ItemId"));
+	        	
+	        }
+	       
+	        reviews.setRating(RatingList);
+	        reviews.setID(ReviewIDList);
+	        preparedStatement.close();
+			}
+			catch(Exception e) {
+				System.out.println(e);}
+	        
+			return reviews;
+	  }
+
 //========================================================
   // big function that just initializes all the necessary
   // tables using other insert functions

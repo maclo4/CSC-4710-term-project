@@ -137,7 +137,107 @@
   <input type = "hidden" name ="FormName" value ="GetUserReviews" >
   <input type="submit" value="Add"></form>
   
+ <br><br>
  
+ <%
+  		UserClass niceUsers = new UserClass();
+        niceUsers = dbFunctions.listNoPoorReviews();
+        List<String> listNiceUsers = new ArrayList<>(niceUsers.getUsername());
+       
+        
+  %>
+     <!-- Display table of favorite sellers -->
+     <hr>
+   
+   <h2 align="center">Users With No Poor Reviews</h2>
+    
+    <style> table, th, td {
+  border: 1px solid black;
+ 
+}</style>
+    <table style="width:10%" align = "center">
+    <tr>
+    <th> </th>
+    <th>Item </th>
+    
+    </tr>
+    <%
+    	for(int i =0; i < listNiceUsers.size(); i++){
+    %>
+  <tr>
+  <th> <%=i+1%>: </th>
+   
+    <th> <%=listNiceUsers.get(i) %></th>
+    
+    
+  </tr>
+   <%
+   	}
+   %>
+   </table>
+   
+   <br>
+
+<br><br>
+<%
+  		UserClass meanUsers = new UserClass();
+        niceUsers = dbFunctions.listNoExcellentReviews();
+        List<String> listMeanUsers = new ArrayList<>(niceUsers.getUsername());
+       
+        
+  %>
+     <!-- Display table of favorite sellers -->
+     <hr>
+   
+   <h2 align="center">Users With No Excellent Reviews</h2>
+    
+    <style> table, th, td {
+  border: 1px solid black;
+ 
+}</style>
+    <table style="width:10%" align = "center">
+    <tr>
+    <th> </th>
+    <th>Item </th>
+    
+    </tr>
+    <%
+    	for(int i =0; i < listMeanUsers.size(); i++){
+    %>
+  <tr>
+  <th> <%=i+1%>: </th>
+   
+    <th> <%=listMeanUsers.get(i) %></th>
+    
+    
+  </tr>
+   <%
+   	}
+   %>
+   </table>
+   
+   <br><hr><br>
+   
+      <!-- ================	List No Poor Reviews	================-->
+
+	<form action="controller.jsp" method="POST" align="center"> <br>
+	<h4>List users who are literally sucking each other off constantly</h4>
+	<select name = "User1">
+        <%  for(int i =0; i < listAllSellers.size(); i++){ %>
+            <option value = "<%= listAllSellers.get(i)%>">
+            <%= listAllSellers.get(i)%></option>
+        <% } %>
+  </select>
+  <select name = "User2">
+        <%  for(int i =0; i < listAllSellers.size(); i++){ %>
+            <option value = "<%= listAllSellers.get(i)%>">
+            <%= listAllSellers.get(i)%></option>
+        <% } %>
+  </select>
+	<input type = "hidden" name ="FormName" value="GetUserPairs" >
+	<input type="submit" value="Find Pairs">
+	</form>
+   
 
 <br><br>
 
