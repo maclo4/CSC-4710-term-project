@@ -221,7 +221,7 @@
       <!-- ================	List No Poor Reviews	================-->
 
 	<form action="controller.jsp" method="POST" align="center"> <br>
-	<h4>List users who are literally sucking each other off constantly</h4>
+	<h4>List Users Who Have given Each Other Only Excellent Reviews</h4>
 	<select name = "User1">
         <%  for(int i =0; i < listAllSellers.size(); i++){ %>
             <option value = "<%= listAllSellers.get(i)%>">
@@ -240,6 +240,23 @@
    
 
 <br><br>
+
+	<form action="controller.jsp" method="POST" align="center"> <br>
+	<h4>List Items By User With Only Excellent or Good Reviews </h4>
+	<select name = "User1">
+        <%  for(int i =0; i < listAllSellers.size(); i++){ %>
+            <option value = "<%= listAllSellers.get(i)%>">
+            <%= listAllSellers.get(i)%></option>
+        <% } %>
+  </select>
+ 
+	<input type = "hidden" name ="FormName" value="GetExcellentItems" >
+	<input type="submit" value="Find Pairs">
+	</form>
+   
+
+<br><br>
+
 
 <form action = "home.jsp" method = "GET">
 	<input type="submit" value="Home Page" name = "Home Page">

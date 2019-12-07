@@ -22,7 +22,7 @@ public class ItemClass {
 			title.clear();
 		}
 		title.addAll(p_title);
-		System.out.println("This the title that just got added to an itemClass object: " +title.get(0));
+		
 	}
 	public List<String> getUsername(){
 		

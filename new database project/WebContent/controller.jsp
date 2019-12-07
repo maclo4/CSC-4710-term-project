@@ -492,6 +492,56 @@ switch(htmlFormName) {
 		  output.println("<br>Test was failed");
 	  
 	  break;
+	  
+
+// ========================================================
+// FIND ITEMS BY USERS WITH ONLY EXCELLENT OR GOOD REVIEWS
+// ========================================================
+  case "GetExcellentItems":
+	  
+	// get the html super variables
+	 user1 = request.getParameter("User1");
+	 
+	 ItemClass userItems = new ItemClass();
+	 userItems = test.getItemsByUser(user1);
+	 ReviewClass itemReviews = new ReviewClass();
+	 List<String> listItemID= userItems.getID();
+	 List<String> listItemNames= userItems.getTitle();
+	 List<String> reviewRatings;
+	 Boolean excellent = true;
+	 Boolean empty = false;
+	 String excellentString = "Excellent";
+	 String goodString = "Good";
+	 int countExcellent = 0;
+	 
+	 
+	 for(int i = 0; i< listItemID.size(); i++){
+		 itemReviews = test.getReviewsForItem(listItemID.get(i));
+		 reviewRatings = itemReviews.getRating();
+		 
+		 for(int j = 0; j<reviewRatings.size(); j++){
+			 
+			 countExcellent++;
+			 if(!(excellentString.equals(reviewRatings.get(j)) || goodString.equals(reviewRatings.get(j)))){
+				 excellent = false;
+			 }
+		 }
+		 
+		if(countExcellent==0){
+			empty = true;
+		}
+		 
+		 if(excellent == true && empty ==false)
+			 output.println("<br> "+ listItemNames.get(i) + 
+					 ": All reviews for this item are Excellent or good<br>");
+		 
+		countExcellent=0;
+		excellent = true;
+		empty = false;
+	 }
+		  
+	
+	  break;
 // ========================================================
 // DEFAULT CASE
 // ========================================================

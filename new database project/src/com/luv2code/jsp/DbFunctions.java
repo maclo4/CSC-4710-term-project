@@ -954,7 +954,7 @@ public ItemClass getItemsByUser(String user) throws SQLException{
 	  connect_func();
 	  ItemClass Items = new ItemClass();
 	  
-	  String sql0 = "select ID\r\n" + 
+	  String sql0 = "select ID, title\r\n" + 
 	  		"from Items\r\n" + 
 	  		"where SellerUsername =?";
 	  
@@ -968,14 +968,16 @@ public ItemClass getItemsByUser(String user) throws SQLException{
 	        // class that holds data for this type of search
 	        
 	        List<String> IDList = new ArrayList<>();
+	        List<String> titleList = new ArrayList<>();
 	        while(resultSet2.next()) {
 	        	
 	        	IDList.add(resultSet2.getString("ID"));
-	        	
+	        	titleList.add(resultSet2.getString("title"));
 	        }
 	       
 	      
 	        Items.setID(IDList);
+	        Items.setTitle(titleList);
 	        preparedStatement.close();
 			}
 			catch(Exception e) {
@@ -985,7 +987,7 @@ public ItemClass getItemsByUser(String user) throws SQLException{
 	  }
 
 //=======================================================
-//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+// GET REVIEWS BY A CERTAIN USER
 //========================================================
 public ReviewClass getReviewsByUser(String user) throws SQLException{
 	  
@@ -999,6 +1001,45 @@ public ReviewClass getReviewsByUser(String user) throws SQLException{
 	  
 	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
 	  preparedStatement.setString(1, user);
+	  
+			// try blocks so that the system doesn't crash when sql statements are rejected
+			try {
+			ResultSet resultSet2 = preparedStatement.executeQuery();
+			
+	        // class that holds data for this type of search
+	        List<String> RatingList = new ArrayList<>();
+	        List<String> ReviewIDList = new ArrayList<>();
+	        while(resultSet2.next()) {
+	        	RatingList.add(resultSet2.getString("Rating"));
+	        	ReviewIDList.add(resultSet2.getString("ItemId"));
+	        	
+	        }
+	       
+	        reviews.setRating(RatingList);
+	        reviews.setID(ReviewIDList);
+	        preparedStatement.close();
+			}
+			catch(Exception e) {
+				System.out.println(e);}
+	        
+			return reviews;
+	  }
+
+//=======================================================
+//GET REVIEWS BY A CERTAIN USER
+//========================================================
+public ReviewClass getReviewsForItem(String item) throws SQLException{
+	  
+	  connect_func();
+	  ReviewClass reviews = new ReviewClass();
+	  
+	  String sql0 = "select *\r\n" + 
+	  		"from Reviews\r\n" + 
+	  		"where ItemID = ?" + 
+	  		"";
+	  
+	  preparedStatement = (PreparedStatement) connect.prepareStatement(sql0);
+	  preparedStatement.setString(1, item);
 	  
 			// try blocks so that the system doesn't crash when sql statements are rejected
 			try {
