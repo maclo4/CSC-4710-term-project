@@ -257,7 +257,6 @@
 
 <br><br>
 
-
 <form action = "home.jsp" method = "GET">
 	<input type="submit" value="Home Page" name = "Home Page">
 	</form>

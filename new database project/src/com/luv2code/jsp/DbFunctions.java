@@ -900,9 +900,6 @@ public UserClass listNoPoorReviews() throws SQLException{
 //DISPLAY USERS WHOS ITEMS HAVE NO EXCELLENT REVIEWS
 //======================================================== 	
 	 
-//=======================================================
-//GET USERS WHO HAVE NEVER POSTED A POOR REVIEW
-//========================================================
 public UserClass listNoExcellentReviews() throws SQLException{
 	  	connect_func();
 	  	UserClass users = new UserClass();
@@ -947,10 +944,10 @@ public UserClass listNoExcellentReviews() throws SQLException{
 }
 
 //=======================================================
-//SEARCH FOR AN ITEM BASED ON THE CATEGORY
+//SEARCH FOR AN ITEM BASED ON THE USER
 //========================================================
 public ItemClass getItemsByUser(String user) throws SQLException{
-	  
+	   
 	  connect_func();
 	  ItemClass Items = new ItemClass();
 	  
@@ -985,6 +982,7 @@ public ItemClass getItemsByUser(String user) throws SQLException{
 	        
 			return Items;
 	  }
+
 
 //=======================================================
 // GET REVIEWS BY A CERTAIN USER
@@ -1026,7 +1024,7 @@ public ReviewClass getReviewsByUser(String user) throws SQLException{
 	  }
 
 //=======================================================
-//GET REVIEWS BY A CERTAIN USER
+//GET REVIEWS BY A CERTAIN ITEM
 //========================================================
 public ReviewClass getReviewsForItem(String item) throws SQLException{
 	  
@@ -1063,6 +1061,50 @@ public ReviewClass getReviewsForItem(String item) throws SQLException{
 	        
 			return reviews;
 	  }
+
+//=======================================================
+//DISPLAY USERS WHOS REVIEWS ARE ALL POOR
+//======================================================== 	
+	 
+public UserClass listAllReviewsPoor() throws SQLException{
+	  	connect_func();
+	  	UserClass users = new UserClass();
+				  
+	  	String sql0 = "SELECT UserID" +
+	  			      "FROM Users" +
+	  			      "WHERE UserID IN" +	  
+	  				  "(SELECT ReviewerId" +
+	  			      "FROM Reviews" +
+	  			      "WHERE ((Rating = 'Poor') - (Rating != 'Poor')) )";
+
+	  	statement =  (Statement) connect.createStatement();
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = statement.executeQuery(sql0);
+				
+		// class that holds data for this type of search
+		
+		List<String> usernameList = new ArrayList<>();
+		
+		
+		while(resultSet.next()) {
+			usernameList.add(resultSet.getString("UserID"));
+	
+		    	}
+		       
+	    users.setUsername(usernameList);
+	
+	    
+	    statement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return users;
+
+}
 
 //========================================================
   // big function that just initializes all the necessary

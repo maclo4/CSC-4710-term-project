@@ -154,7 +154,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
 
 	<form action="controller.jsp" method="POST" > <br>
 	<h4>List Users Who Posted No Poor Reviews</h4>
-	<input type = "hidden" name ="FormName" value="NoPoor" >
+	<input type = "hidden" name ="FormName" value="ListNoPoor" >
 	<input type="submit" value="List Users">
 	</form>
 
@@ -165,12 +165,22 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
 
 	<form action="controller.jsp" method="POST" > <br>
 	<h4>List Users Who's Items Have No Excellent Reviews</h4>
-	<input type = "hidden" name ="FormName" value="NoExcellent" >
+	<input type = "hidden" name ="FormName" value="ListNoExcellent" >
 	<input type="submit" value="List Users">
 	</form>
 
 <%
 
+%>
+<!-- ================	List All Users Who's Reviews Were Poor	================-->
+
+	<form action="controller.jsp" method="POST" > <br>
+	<h4>List Users Who's Reviews Were All Poor</h4>
+	<input type = "hidden" name ="FormName" value="ListUserReviewsOnlyPoor" >
+	<input type="submit" value="List Users">
+	</form>
+
+<%
    // ============================================================================
    // favorite item variables
    // ============================================================================

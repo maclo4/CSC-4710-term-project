@@ -273,9 +273,28 @@ switch(htmlFormName) {
 			out.println("User Name:  " +listUsers.get(i) + "<br>");}
 			
 		*/
+			
 		break;
 			
- 
+
+// ========================================================
+// FIND ITEMS BY USERS WITH ONLY EXCELLENT OR GOOD REVIEWS
+// ========================================================
+  case "ListUserReviewsOnlyPoor":
+	  
+	  UserClass grumpyUsers = new UserClass();
+	  grumpyUsers = test.listAllReviewsPoor();
+		
+		List<String> listReviewers3 = new ArrayList<>(grumpyUsers.getUsername());
+		
+		System.out.println("outside listOnlyPoor for loop");
+		for (int i=0; i < listReviewers3.size(); i++){
+			System.out.println("inside listOnlyPoor for loop");
+			out.println("Item Name:  " +listReviewers3.get(i) + "<br>");}
+		
+	  
+	  break;
+
 // ========================================================
 // ADD FAVORITE ITEM
 // ========================================================
@@ -542,6 +561,9 @@ switch(htmlFormName) {
 		  
 	
 	  break;
+	  
+	  	  
+	  
 // ========================================================
 // DEFAULT CASE
 // ========================================================
