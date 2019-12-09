@@ -251,7 +251,7 @@ switch(htmlFormName) {
 		System.out.println("outside listNoPoor for loop");
 		for (int i=0; i < listReviewers.size(); i++){
 			System.out.println("inside listNoPoor for loop");
-			out.println("Item Name:  " +listReviewers.get(i) + "<br>");}
+			out.println("User Name:  " +listReviewers.get(i) + "<br>");}
 			
 		break;
 			
@@ -290,7 +290,7 @@ switch(htmlFormName) {
 		System.out.println("outside listOnlyPoor for loop");
 		for (int i=0; i < listReviewers3.size(); i++){
 			System.out.println("inside listOnlyPoor for loop");
-			out.println("Item Name:  " +listReviewers3.get(i) + "<br>");}
+			out.println("User Name:  " +listReviewers3.get(i) + "<br>");}
 		
 	  
 	  break;
