@@ -146,7 +146,7 @@
        
         
   %>
-     <!-- Display table of favorite sellers -->
+     <!-- Display table of nice users  -->
      <hr>
    
    <h2 align="center">Users With No Poor Reviews</h2>
@@ -186,7 +186,7 @@
        
         
   %>
-     <!-- Display table of favorite sellers -->
+     <!-- Display table of mean users-->
      <hr>
    
    <h2 align="center">Users With No Excellent Reviews</h2>
@@ -216,12 +216,69 @@
    %>
    </table>
    
+   
+   <br><br>
+<%
+  		UserClass poorUsers = new UserClass();
+        niceUsers = dbFunctions.listAllReviewsPoor();
+        List<String> listPoorUsers = new ArrayList<>(poorUsers.getUsername());
+       
+        
+  %>
+     <!-- Display table of poor users-->
+     <hr>
+   
+   <h2 align="center">Users With All Reviews Poor</h2>
+    
+    <style> table, th, td {
+  border: 1px solid black;
+ 
+}</style>
+    <table style="width:10%" align = "center">
+    <tr>
+    <th> </th>
+    <th>User </th>
+    
+    </tr>
+    <%
+    	for(int i =0; i < listPoorUsers.size(); i++){
+    %>
+  <tr>
+  <th> <%=i+1%>: </th>
+   
+    <th> <%=listPoorUsers.get(i) %></th>
+    
+    
+  </tr>
+   <%
+   	}
+   %>
+   </table>   
+   
+   
+        <!-- Display table of poor users-->
+   
+      <br><hr><br>
+      
+   <h2 align="center">Users Who Posted No Poor Reviews</h2>
+    
+   <!-- ================	List No Poor Reviews	================-->
+
+	<form action="controller.jsp" method="POST" > <br>
+	<h4>List Users Who Posted No Poor Reviews</h4>
+	<input type = "hidden" name ="FormName" value="ListNoPoor" >
+	<input type="submit" value="List Users">
+	</form>
+
+   
+   
    <br><hr><br>
    
+      
       <!-- ================	List No Poor Reviews	================-->
 
 	<form action="controller.jsp" method="POST" align="center"> <br>
-	<h4>List Users Who Have given Each Other Only Excellent Reviews</h4>
+	<h4>List Users Who Have Given Each Other Only Excellent Reviews</h4>
 	<select name = "User1">
         <%  for(int i =0; i < listAllSellers.size(); i++){ %>
             <option value = "<%= listAllSellers.get(i)%>">

@@ -278,24 +278,6 @@ switch(htmlFormName) {
 			
 
 // ========================================================
-// FIND ITEMS BY USERS WITH ONLY EXCELLENT OR GOOD REVIEWS
-// ========================================================
-  case "ListUserReviewsOnlyPoor":
-	  
-	  UserClass grumpyUsers = new UserClass();
-	  grumpyUsers = test.listAllReviewsPoor();
-		
-		List<String> listReviewers3 = new ArrayList<>(grumpyUsers.getUsername());
-		
-		System.out.println("outside listOnlyPoor for loop");
-		for (int i=0; i < listReviewers3.size(); i++){
-			System.out.println("inside listOnlyPoor for loop");
-			out.println("User Name:  " +listReviewers3.get(i) + "<br>");}
-		
-	  
-	  break;
-
-// ========================================================
 // ADD FAVORITE ITEM
 // ========================================================
   case "DeleteFavorite":
@@ -560,9 +542,63 @@ switch(htmlFormName) {
 	 }
 		  
 	
-	  break;
+  break;
+  
+// ========================================================
+// FIND USERS WITH ONLY POOR REVIEWS - REQUIREMENT 8
+// ========================================================
+  case "ListUserReviewsOnlyPoor":
 	  
-	  	  
+	  user1 = request.getParameter("User1");
+
+	  UserClass users2 = new UserClass();
+	  ReviewClass itemReviews2 = new ReviewClass();
+	  List<String> reviewRatings2;
+	  List<String> listUsersID = users2.getUsername();
+	  Boolean poor = true;
+	  Boolean emptyPoor = false;
+	  String poorString = "Poor";
+	  int countPoor = 0;
+	  
+	  for(int i = 0; i< listUsersID.size(); i++){
+			 itemReviews2 = test.getReviewsByUser("User1");
+			 reviewRatings2 = itemReviews2.getRating();
+			 
+			 for(int j = 0; j<reviewRatings2.size(); j++){
+				 
+				 countPoor++;
+				 if(!(poorString.equals(reviewRatings2.get(j)))){
+					 poor = false;
+				 }
+			 }
+			 
+			if(countPoor==0){
+				emptyPoor = true;
+			}
+			 
+			 if(poor == true && emptyPoor == false)
+				 output.println("<br> "+ listUsersID.get(i) + 
+						 ": All reviews by these Users are Poor<br>");
+			 
+			countPoor =0;
+			poor = true;
+			emptyPoor = false;
+		 }
+			
+	  /*
+	  UserClass grumpyUsers = new UserClass();
+	  grumpyUsers = test.listAllReviewsPoor();
+		
+		List<String> listReviewers3 = new ArrayList<>(grumpyUsers.getUsername());
+		
+		System.out.println("outside listOnlyPoor for loop");
+		for (int i=0; i < listReviewers3.size(); i++){
+			System.out.println("inside listOnlyPoor for loop");
+			out.println("User Name:  " +listReviewers3.get(i) + "<br>");}
+		
+	  */
+	  break;
+
 	  
 // ========================================================
 // DEFAULT CASE

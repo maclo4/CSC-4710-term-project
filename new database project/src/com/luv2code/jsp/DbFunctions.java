@@ -1070,8 +1070,10 @@ public UserClass listAllReviewsPoor() throws SQLException{
 	  	connect_func();
 	  	UserClass users = new UserClass();
 				  
-	  	String sql0 = "SELECT UserID FROM Users WHERE UserID IN(\r\n" +	  
-	  				  "		SELECT ReviewerId FROM Reviews WHERE ((Rating = \"Poor\") - (Rating != \"Poor\")) )";
+	  	String sql0 = "SELECT ReviewerId\r\n" + 
+	  			"FROM Reviews\r\n" + 
+	  			"WHERE Rating = 'Poor'\r\n" + 
+	  			"GROUP BY Rating having count(*)=1";
 
 	  	statement =  (Statement) connect.createStatement();
 	  	//Statement statement2 = (Statement) connect.createStatement();
@@ -1086,7 +1088,7 @@ public UserClass listAllReviewsPoor() throws SQLException{
 		
 		
 		while(resultSet.next()) {
-			usernameList.add(resultSet.getString("UserID"));
+			usernameList.add(resultSet.getString("ReviewerId"));
 	
 		    	}
 		       
