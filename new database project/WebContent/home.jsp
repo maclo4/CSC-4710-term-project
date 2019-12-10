@@ -17,6 +17,8 @@
 
 
 <!-- ===================== forms to add an item to the database =================== -->
+<!-- =============== REQUIREMENT PART 2:1 =============== -->
+
  <form action="controller.jsp" method="POST" >
   <h4>Insert Item into Database: </h4>
   <input type="text" name="ItemName"><br>
@@ -40,6 +42,8 @@
 <hr><br>
 
 <!-- ======================= CATEGORY SEARCH ====================== -->
+<!-- =============== REQUIREMENT PART 2:2 =============== -->
+
 <form action="controller.jsp" method="POST" >
   <h4>Search Items By Category </h4><br>
   <input type="text" name="SearchCategory"><br>
@@ -50,6 +54,8 @@
 <br>
 <hr>
 <!-- ====================== LIST MOST EXPENSIVE =================== -->
+<!-- =============== REQUIREMENT PART 2:6 =============== -->
+
 <form action="controller.jsp" method="POST" > <br>
 <h4>List Most Expensive Item in Each Category</h4>
   <input type = "hidden" name ="FormName" value ="Expensive" >
@@ -77,6 +83,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
 // =============================================================================
 //    <!-- =============== ADD REVIEW ===================================== -->
 // ==============================================================================
+// <!-- =============== REQUIREMENT PART 2:3 =============== -->
 
    %>
     
@@ -162,6 +169,8 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
     <hr>
  
     <!-- Display table of favorite items -->
+    <!-- =============== REQUIREMENT PART 2:4 =============== -->
+    
     <h4>Favorite Items for current user</h4>
     
     <style> table, th, td {
@@ -269,6 +278,8 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
 
 
  <!-- ADD FAVORITE SELLER -->
+ <!-- =============== REQUIREMENT PART 2:5 =============== -->
+ 
 <form action="controller.jsp" method="POST" > <br>
  <h4> Add Sellers to Favorite List </h4>
  

@@ -43,7 +43,8 @@
 
 
 
- <!-- ADD FAVORITE SELLER -->
+ <!-- FIND MUTUAL SELLER -->
+ 
 <form action="controller.jsp" method="POST" align ="center"> <br>
  <h3>Find Mutual Favorite Sellers </h3>
  
@@ -83,7 +84,7 @@
         List<String> listUserReviewItems = new ArrayList<>(userReviews.getTitle());
         
   %>
-     <!-- Display table of favorite sellers -->
+     <!-- Display table of good reviews by user-->
      <hr>
    
    <h2 align="center">Good Reviews by <%=user %></h2>
@@ -147,6 +148,8 @@
         
   %>
      <!-- Display table of nice users  -->
+    	 <!-- REQUIREMENT 7-->
+     
      <hr>
    
    <h2 align="center">Users With No Poor Reviews</h2>
@@ -182,14 +185,18 @@
 <%
   		UserClass meanUsers = new UserClass();
         niceUsers = dbFunctions.listNoExcellentReviews();
+        //make sure that this wasnt supposed to be niceUsers
+        //edit: i think it was supposed to be so i changed it back
         List<String> listMeanUsers = new ArrayList<>(niceUsers.getUsername());
        
         
   %>
      <!-- Display table of mean users-->
+     	<!-- REQUIREMENT 6-->
+     
      <hr>
    
-   <h2 align="center">Users With No Excellent Reviews</h2>
+   <h2 align="center">Users With No Excellent Items</h2>
     
     <style> table, th, td {
   border: 1px solid black;
@@ -217,15 +224,17 @@
    </table>
    
    
-   <br><br>
+<br><br>
 <%
   		UserClass poorUsers = new UserClass();
-        niceUsers = dbFunctions.listAllReviewsPoor();
+        poorUsers = dbFunctions.listAllReviewsPoor();
         List<String> listPoorUsers = new ArrayList<>(poorUsers.getUsername());
        
         
   %>
-     <!-- Display table of poor users-->
+     <!-- Display table of users w/ reviews all poor-->
+	 			<!-- REQUIREMENT 8 -->
+     
      <hr>
    
    <h2 align="center">Users With All Reviews Poor</h2>
@@ -255,27 +264,21 @@
    %>
    </table>   
    
-   
-        <!-- Display table of poor users-->
-   
-      <br><hr><br>
-      
-   <h2 align="center">Users Who Posted No Poor Reviews</h2>
-    
-   <!-- ================	List No Poor Reviews	================-->
-
 	<form action="controller.jsp" method="POST" > <br>
-	<h4>List Users Who Posted No Poor Reviews</h4>
-	<input type = "hidden" name ="FormName" value="ListNoPoor" >
+	<input type = "hidden" name ="FormName" value="ListUserReviewsOnlyPoor" >
 	<input type="submit" value="List Users">
 	</form>
+   
+
+<br><br>
 
    
    
    <br><hr><br>
    
       
-      <!-- ================	List No Poor Reviews	================-->
+      <!-- ================	List Users Who Have Given Each Other Only Excellent Reviews	================-->
+      <!-- ================		(REQUIREMENT 10)	================-->
 
 	<form action="controller.jsp" method="POST" align="center"> <br>
 	<h4>List Users Who Have Given Each Other Only Excellent Reviews</h4>
