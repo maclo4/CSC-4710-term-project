@@ -220,7 +220,7 @@
    <br><br>
 <%
   		UserClass poorUsers = new UserClass();
-        niceUsers = dbFunctions.listAllReviewsPoor();
+        poorUsers = dbFunctions.listAllReviewsPoor();
         List<String> listPoorUsers = new ArrayList<>(poorUsers.getUsername());
        
         
@@ -264,8 +264,8 @@
     
    <!-- ================	List No Poor Reviews	================-->
 
-	<form action="controller.jsp" method="POST" > <br>
-	<h4>List Users Who Posted No Poor Reviews</h4>
+	<form action="controller.jsp" method="POST" align = "center"> <br>
+
 	<input type = "hidden" name ="FormName" value="ListNoPoor" >
 	<input type="submit" value="List Users">
 	</form>

@@ -554,6 +554,7 @@ switch(htmlFormName) {
 	  UserClass users2 = new UserClass();
 	  ReviewClass itemReviews2 = new ReviewClass();
 	  List<String> reviewRatings2;
+	  
 	  List<String> listUsersID = users2.getUsername();
 	  Boolean poor = true;
 	  Boolean emptyPoor = false;
