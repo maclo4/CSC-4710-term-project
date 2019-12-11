@@ -1071,9 +1071,7 @@ public UserClass listAllReviewsPoor() throws SQLException{
 	  	UserClass users = new UserClass();
 				  
 	  	String sql0 = "SELECT ReviewerId\r\n" + 
-	  			"FROM Reviews\r\n" + 
-	  			"WHERE Rating = 'Poor'\r\n" + 
-	  			"GROUP BY Rating having count(*)=1";
+	  			"FROM Reviews\r\n"; 
 
 	  	statement =  (Statement) connect.createStatement();
 	  	//Statement statement2 = (Statement) connect.createStatement();
@@ -1093,8 +1091,6 @@ public UserClass listAllReviewsPoor() throws SQLException{
 		    	}
 		       
 	    users.setUsername(usernameList);
-	
-	    
 	    statement.close();
 				}
 		catch(Exception e) {

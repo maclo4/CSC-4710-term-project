@@ -22,6 +22,8 @@
 
 <h1>Login</h1><br><br>
 
+<!-- =============== REQUIREMENT PART 1:1 =============== -->
+
 <form action = "controller.jsp" method = "GET">
 	<input type="submit" value="Initialize" name = "initialize">
 	 <input type="hidden" name="FormName" value="Initialize"/>
@@ -29,6 +31,8 @@
 
 
 <!--form for user to input their username and password.-->
+<!-- =============== REQUIREMENT PART 1:2 =============== -->
+
  <form action="controller.jsp" method="POST" >
   Username:<br>
   <input type="text" name="Username"><br>
@@ -45,7 +49,9 @@
 <h2> New? Sign up here
 </h2>
 
-<!--form for user to input their username and password.-->
+<!--form for new user to input their username and password.-->
+<!-- =============== REQUIREMENT PART 3:1 =============== -->
+
  <form action="controller.jsp" method="POST" >
   Username:
   <input type="text" name="Username"><br><br>
