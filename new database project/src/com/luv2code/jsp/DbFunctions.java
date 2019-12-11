@@ -1070,8 +1070,13 @@ public UserClass listAllReviewsPoor() throws SQLException{
 	  	connect_func();
 	  	UserClass users = new UserClass();
 				  
-	  	String sql0 = "SELECT ReviewerId\r\n" + 
-	  			"FROM Reviews\r\n"; 
+	  	String sql0 = "SELECT UserID\r\n" + 
+	  			"FROM Users\r\n" + 
+	  			"WHERE UserID IN	  \r\n" + 
+	  			"	(SELECT ReviewerId\r\n" + 
+	  			"    FROM Reviews\r\n" + 
+	  			"    WHERE Rating = 'Poor') ;"; 
+	  	
 
 	  	statement =  (Statement) connect.createStatement();
 	  	//Statement statement2 = (Statement) connect.createStatement();
