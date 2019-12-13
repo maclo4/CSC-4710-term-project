@@ -16,7 +16,9 @@
 <title>Page 2</title>
 </head>
 <body>
-<!-- CATEGORY SEARCH -->
+<!-- 2 DIFFERENT CATEGORY SEARCH -->
+<!-- REQUIREMENT 3:2 -->
+
 <form action="controller.jsp" method="POST" align = "center">
   <h3>Search for users who have posted items in two <br>
    different categories, specified below, on the same day </h3>
@@ -44,6 +46,7 @@
 
 
  <!-- FIND MUTUAL SELLER -->
+ <!-- REQUIREMENT 3:5-->
  
 <form action="controller.jsp" method="POST" align ="center"> <br>
  <h3>Find Mutual Favorite Sellers </h3>
@@ -67,6 +70,9 @@
   <hr>
     <br>
 
+<!-- FIND SELLER WITH MOST ITEMS -->
+<!-- REQUIREMENT 3:4 -->
+
 <form action ="controller.jsp" method = "POST" align = "center">
 <h3>Find Seller With The Most Items</h3>
 	<input type="hidden" name = "FormName" value="FindSellerWithMostItems">
@@ -85,6 +91,8 @@
         
   %>
      <!-- Display table of good reviews by user-->
+     <!-- REQUIREMENT 3:3-->
+     
      <hr>
    
    <h2 align="center">Good Reviews by <%=user %></h2>
@@ -192,7 +200,7 @@
         
   %>
      <!-- Display table of mean users-->
-     	<!-- REQUIREMENT 6-->
+     	<!-- REQUIREMENT 3:6-->
      
      <hr>
    
@@ -292,7 +300,7 @@
    
       
       <!-- ================	List Users Who Have Given Each Other Only Excellent Reviews	================-->
-      <!-- ================		(REQUIREMENT 10)	================-->
+      <!-- ================		(REQUIREMENT 3:10)	================-->
 
 	<form action="controller.jsp" method="POST" align="center"> <br>
 	<h4>List Users Who Have Given Each Other Only Excellent Reviews</h4>
