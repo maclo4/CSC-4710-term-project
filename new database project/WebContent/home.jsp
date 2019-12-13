@@ -230,7 +230,7 @@ String user = String.valueOf(session.getAttribute("Username")); // this is the c
         %>
   </select>
   <input type = "hidden" name ="FormName" value ="DeleteFavorite" >
-  <input type="submit" value="Add"></form>  
+  <input type="submit" value="Delete"></form>  
 
   
         

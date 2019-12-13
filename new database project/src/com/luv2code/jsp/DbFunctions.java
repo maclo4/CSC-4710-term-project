@@ -1105,6 +1105,46 @@ public UserClass listAllReviewsPoor() throws SQLException{
 
 }
 
+//=======================================================
+//DISPLAY USERS WHOS REVIEWS ARE ALL POOR
+//======================================================== 	
+	 
+public UserClass listUsersOnlyPoorReviews() throws SQLException{
+	  	connect_func();
+	  	UserClass users = new UserClass();
+				  
+	  	String sql0 = "select * from Users U where UserId NOT in(\r\n" + 
+	  			"	select ReviewerId \r\n" + 
+	  			"    from Reviews\r\n" + 
+	  			"    where Rating != \"poor\")"; 
+	  	
+
+	  	statement =  (Statement) connect.createStatement();
+	  	//Statement statement2 = (Statement) connect.createStatement();
+		  
+		// try blocks so that the system doesn't crash when sql statements are rejected
+		try {
+			resultSet = statement.executeQuery(sql0);
+				
+		// class that holds data for this type of search
+		
+		List<String> usernameList = new ArrayList<>();
+		
+		
+		while(resultSet.next()) {
+			usernameList.add(resultSet.getString("UserId"));
+	
+		    	}
+		       
+	    users.setUsername(usernameList);
+	    statement.close();
+				}
+		catch(Exception e) {
+			System.out.println(e);}
+		        
+		return users;
+
+}
 //========================================================
   // big function that just initializes all the necessary
   // tables using other insert functions
@@ -1245,7 +1285,17 @@ public UserClass listAllReviewsPoor() throws SQLException{
 		 	test.insertCategory("iPhone", "technology");
 		 	test.insertCategory("China Plates", "home");
 		 	
-		 
+		    test.addReview("maclo4", "7", "wonderful", "Excellent");
+		    test.addReview("evan", "7", "wonderful", "Excellent");
+		    test.addReview("corey", "7", "wonderful", "Excellent");
+		    test.addReview("corey", "2", "wonderful", "Excellent");
+		    
+		    test.addReview("root", "5", "terrible", "Poor");
+		    test.addReview("root", "1", "its soft", "Poor");
+		    test.addReview("root", "3", "not good item", "Poor");
+		    
+		    //test.addReview("evan", "White tee", "wonderful", "Excellent");
+		    //test.addReview("corey", "White tee", "wonderful", "Excellent");
 	        return true;
 			
 	  }

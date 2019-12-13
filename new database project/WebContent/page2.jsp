@@ -16,10 +16,9 @@
 <title>Page 2</title>
 </head>
 <body>
-<!-- 2 DIFFERENT CATEGORY SEARCH -->
-<!-- REQUIREMENT 3:2 -->
-
+<!-- CATEGORY SEARCH -->
 <form action="controller.jsp" method="POST" align = "center">
+<h5 align = "left"> Requirement 2</h5>
   <h3>Search for users who have posted items in two <br>
    different categories, specified below, on the same day </h3>
   Category 1: <input type="text" name="CategoryX" ><br>
@@ -46,9 +45,9 @@
 
 
  <!-- FIND MUTUAL SELLER -->
- <!-- REQUIREMENT 3:5-->
  
 <form action="controller.jsp" method="POST" align ="center"> <br>
+<h5 align = "left"> Requirement 5</h5>
  <h3>Find Mutual Favorite Sellers </h3>
  
  <select name = "BuyerOne">
@@ -65,19 +64,7 @@
   </select>
   <input type = "hidden" name ="FormName" value ="FindMutualSellers" >
   <input type="submit" value="Find Mutual Favorites"></form>
-  
-  <br>
-  <hr>
-    <br>
 
-<!-- FIND SELLER WITH MOST ITEMS -->
-<!-- REQUIREMENT 3:4 -->
-
-<form action ="controller.jsp" method = "POST" align = "center">
-<h3>Find Seller With The Most Items</h3>
-	<input type="hidden" name = "FormName" value="FindSellerWithMostItems">
-	<input type = "submit" value="Search">
-</form>
 <br>
 <br>
 
@@ -91,11 +78,9 @@
         
   %>
      <!-- Display table of good reviews by user-->
-     <!-- REQUIREMENT 3:3-->
-     
      <hr>
-   
-   <h2 align="center">Good Reviews by <%=user %></h2>
+   <h5 align = "left"> Requirement 3</h5>
+   <h2 align="center">Good Reviews by certain user (default is current user)</h2>
     
     <style> table, th, td {
   border: 1px solid black;
@@ -133,6 +118,7 @@
 </table>
 
 
+
  <!-- DROP DOWN BOX TO DISPLAY ALL THE USERS FROM WHICH TO CHOOSE -->
 <form action="page2.jsp" method="POST" align="center" > <br>
  <h4> Choose a Seller </h4>
@@ -148,6 +134,19 @@
   
  <br><br>
  
+   
+  <br>
+  <hr>
+    <br>
+
+<form action ="controller.jsp" method = "POST" align = "center">
+<h5 align = "left"> Requirement 4</h5>
+<h3>Find Seller With The Most Items</h3>
+	<input type="hidden" name = "FormName" value="FindSellerWithMostItems">
+	<input type = "submit" value="Search">
+</form>
+<br>
+ 
  <%
   		UserClass niceUsers = new UserClass();
         niceUsers = dbFunctions.listNoPoorReviews();
@@ -159,7 +158,7 @@
     	 <!-- REQUIREMENT 7-->
      
      <hr>
-   
+   <h5 align = "left"> Requirement 7</h5>
    <h2 align="center">Users With No Poor Reviews</h2>
     
     <style> table, th, td {
@@ -200,10 +199,10 @@
         
   %>
      <!-- Display table of mean users-->
-     	<!-- REQUIREMENT 3:6-->
+     	<!-- REQUIREMENT 6-->
      
      <hr>
-   
+   <h5 align = "left"> Requirement 6</h5>
    <h2 align="center">Users With No Excellent Items</h2>
     
     <style> table, th, td {
@@ -244,53 +243,34 @@
 	 			<!-- REQUIREMENT 8 -->
      
      <hr>
-   
+     
+   <h5 align = "left"> Requirement 8</h5>
    <h2 align="center">Users With All Reviews Poor</h2>
-    
-    <style> table, th, td {
-  border: 1px solid black;
- 
-}</style>
-    <table style="width:10%" align = "center">
-    <tr>
-    <th> </th>
-    <th>User </th>
-    
-    </tr>
-    <%
-    	for(int i =0; i < listPoorUsers.size(); i++){
-    %>
-  <tr>
-  <th> <%=i+1%>: </th>
    
-    <th> <%=listPoorUsers.get(i) %></th>
+  <form action="controller.jsp" method="POST" align="center"> <br>
+	<input type = "hidden" name ="FormName" value="ListOnlyPoorReviews" >
+	<input type="submit" value="List Users" >
+	</form>
     
-    
-  </tr>
-   <%
-   	}
-   %>
-   </table>   
+
    
-   
-        <!-- Display table of poor users-->
+  <!--      
    
       <br><hr><br>
-      
+      <h5 align = "left"> Requirement 7</h5>
    <h2 align="center">Users Who Posted No Poor Reviews</h2>
-    
-   <!-- ================	List No Poor Reviews	================-->
+   
 
 	<form action="controller.jsp" method="POST" align = "center"> <br>
 
   <input type = "hidden" name ="FormName" value="ListNoPoor" >
   </form>
   
-	<form action="controller.jsp" method="POST" > <br>
+	<form action="controller.jsp" method="POST" align="center"> <br>
 	<input type = "hidden" name ="FormName" value="ListUserReviewsOnlyPoor" >
-	<input type="submit" value="List Users">
+	<input type="submit" value="List Users" >
 	</form>
-   
+    -->
 
 <br><br>
 
@@ -300,8 +280,8 @@
    
       
       <!-- ================	List Users Who Have Given Each Other Only Excellent Reviews	================-->
-      <!-- ================		(REQUIREMENT 3:10)	================-->
-
+      <!-- ================		(REQUIREMENT 10)	================-->
+<h5 align = "left"> Requirement 9</h5>
 	<form action="controller.jsp" method="POST" align="center"> <br>
 	<h4>List Users Who Have Given Each Other Only Excellent Reviews</h4>
 	<select name = "User1">

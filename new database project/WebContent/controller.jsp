@@ -604,6 +604,20 @@ switch(htmlFormName) {
 // ========================================================
 // DEFAULT CASE
 // ========================================================
+  case "ListOnlyPoorReviews":
+	  
+  UserClass meanReviewers = new UserClass();
+	  
+  meanReviewers = test.listUsersOnlyPoorReviews();
+	  
+	  List<String> meanReviewerList = meanReviewers.getUsername();
+	  
+	  output.println("<h3> User(s) with the most items <h3>");
+	  size = meanReviewerList.size();
+	  
+	  for(int i =0; i<size; i++){
+	  output.println(i+1 + ": "+ meanReviewerList.get(i) + "<br>");}
+	  break;
   default:
     // code block
 }
