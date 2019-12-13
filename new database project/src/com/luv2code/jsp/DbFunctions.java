@@ -1073,8 +1073,8 @@ public UserClass listAllReviewsPoor() throws SQLException{
 	  	String sql0 = "SELECT UserID\r\n" + 
 	  			"FROM Users\r\n" + 
 	  			"WHERE UserID IN	  \r\n" + 
-	  			"	(SELECT ReviewerId\r\n" + 
-	  			"    FROM Reviews\r\n" + 
+	  			"	(SELECT ReviewerId \r\n" + 
+	  			"    FROM Reviews \r\n" + 
 	  			"    WHERE Rating = 'Poor') ;"; 
 	  	
 
@@ -1187,6 +1187,7 @@ public UserClass listUsersOnlyPoorReviews() throws SQLException{
 		 			"Gender varchar(10) NOT NULL," + 
 		 			"Age int(3) NOT NULL," + 
 		 			"Admin boolean NOT NULL," + 
+		 			"reviewsPerDay int check(reviewsPerDay <= 5) ," + 
 		 			"PRIMARY KEY(UserID)," + 
 		 			"CHECK (Gender='Male' OR Gender = \"Female\" OR Gender = \"Non-binary\")," + 
 		 			"CHECK (Email like '%_@__%.__%'));";

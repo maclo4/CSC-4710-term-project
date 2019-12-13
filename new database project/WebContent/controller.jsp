@@ -222,6 +222,8 @@ switch(htmlFormName) {
 	  output = response.getWriter();
 	  output.println("Form submitted: " + htmlFormName);
 	  
+	  //if( check it here reviewsPerDay" > 5
+
 	  String reviewer = sessionUser;
 	  String reviewItem = request.getParameter("ReviewItem");
 	  String review = request.getParameter("ReviewDescription");
